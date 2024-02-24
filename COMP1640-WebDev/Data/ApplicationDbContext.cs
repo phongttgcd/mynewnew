@@ -1,11 +1,12 @@
-﻿using COMP1640_WebDev.Ultils;
+﻿using COMP1640_WebDev.Models;
+using COMP1640_WebDev.Ultils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace COMP1640_WebDev.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

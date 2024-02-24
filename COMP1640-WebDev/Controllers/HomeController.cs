@@ -1,9 +1,12 @@
 using COMP1640_WebDev.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace COMP1640_WebDev.Controllers
 {
+
+    [Authorize(Roles = "Guest")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
