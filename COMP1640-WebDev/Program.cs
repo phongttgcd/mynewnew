@@ -48,8 +48,8 @@ app.MapRazorPages();
 using (var scope = app.Services.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    var user = await userManager.FindByEmailAsync("guest@local.com ");
-    if(user != null)
+    var user = await userManager.FindByEmailAsync("guest@local.com");
+    if (user != null)
     {
         await userManager.AddToRoleAsync(user, "Guest");
     }
