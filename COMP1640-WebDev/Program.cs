@@ -44,14 +44,24 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 
-//1. Add admin role to account
+//1. Add role to account
 using (var scope = app.Services.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    var user = await userManager.FindByEmailAsync("guest@local.com ");
-    if(user != null)
+    var user1 = await userManager.FindByEmailAsync("guest@local.com");
+    var user2 = await userManager.FindByEmailAsync("admin@admin.com");
+    var user3 = await userManager.FindByEmailAsync("mm@gmail.com");
+    var user4 = await userManager.FindByEmailAsync("mc@gmail.com");
+    var user5 = await userManager.FindByEmailAsync("student1@student.com");
+
+    if((user1 != null))
     {
-        await userManager.AddToRoleAsync(user, "Guest");
+        await userManager.AddToRoleAsync(user1, "Guest");
+        await userManager.AddToRoleAsync(user2, "Admin");
+        await userManager.AddToRoleAsync(user3, "Marketing Manager");
+        await userManager.AddToRoleAsync(user4, "Marketing Coordinator");
+        await userManager.AddToRoleAsync(user5, "Student");
+
     }
 }
 
