@@ -12,16 +12,21 @@
         background-repeat: no-repeat;
         background-size: cover;
     }
+    .card{
+        max-width: 400px;
+    }
 </style>
 
 
 <div class="backgroundContainer min-vh-100">
     <div class="container py-5">
-        <div class="card shadow-lg mx-auto bg-dark text-light" style="max-width:400px;">
+        <div class="card shadow-lg mx-auto bg-dark text-light">
             <div class="card-body">
-                <h2 class="card-title text-center mb-4 text-light-50">LOGIN</h2>
-                <hr class="border border-light border-2" />
                 <form id="account" method="post">
+                    <h2 class="card-title text-center mb-4 text-light-50">
+                        LOGIN
+                    </h2>
+                    <hr class="border border-light border-2" />
                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                     <div class="mb-3">
                         <label asp-for="Input.Email" class="form-label">Email</label>
@@ -43,7 +48,7 @@
                         </p>
                     </div>
                     <div class="mb-4">
-                        <button id="login-submit" type="submit" class="btn btn-primary w-100">
+                        <button id="login-submit" type="submit" class="btn btn-lg btn-outline-secondary w-100">
                             Log In
                         </button>
                     </div>
