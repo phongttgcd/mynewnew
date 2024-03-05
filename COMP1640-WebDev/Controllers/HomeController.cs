@@ -6,7 +6,6 @@ using System.Diagnostics;
 namespace COMP1640_WebDev.Controllers
 {
 
-    [Authorize(Roles = "Guest")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -1,0 +1,91 @@
+﻿@{
+    var articles = new[]
+           {
+        new
+        {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+          new
+        {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+          new
+        {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+          new
+        {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+          new
+        {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+        new
+         {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+    };
+}
+
+
+<style>
+    .articleCard {
+        max-width: 540px;
+        transition: transform 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease, border 0.3s ease;
+    }
+
+        .articleCard:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 6px 15px rgba(0, 0, 0, 0.1), 0 15px 25px rgba(0, 0, 0, 0.1);
+        }
+
+    .imageArticle {
+        height: 100%;
+        width: 100%;
+    }
+</style>
+
+
+<div class="row">
+    @foreach (var article in articles)
+    {
+        <div class="col-lg-6">
+            <a class="text-decoration-none text-dark" asp-controller="Home" asp-action="Index">
+                <div class="articleCard card mb-4">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="@article.ImageUrl" class="imageArticle img-thumbnail rounded-start" alt="Image">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">@article.Title</h5>
+                                <p class="card-text">@article.Description</p>
+                                <p class="card-text"><small class="text-muted">@article.LastUpdated</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+

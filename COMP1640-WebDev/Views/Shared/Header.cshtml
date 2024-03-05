@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+
+@{
+    string href = "/";
+    // Assuming you have a variable named "role" that holds the user's role
+    if (User.IsInRole("Admin"))
+    {
+        href = "/admin";
+    }
+    else if (User.IsInRole("Marketing Manager"))
+    {
+        href = "/marketingmanager";
+    }
+    else if (User.IsInRole("Marketing Coordinator"))
+    {
+        href = "/marketingcoordinator";
+    }
+    else if (User.IsInRole("Student"))
+    {
+        href = "/student";
+    }
+    else
+    {
+        href = "/";
+    }
+}
+
+<style>
+
+</style>
+
+<header class="p-3 border-bottom border-danger border-4 bg-light">
+    <div class="container p-0">
+        <div class="d-flex flex-wrap align-items-center justify-content-lg-between justify-content-between">
+            <a href="@href" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                <img class="logo" src="https://brandcentre.gre.ac.uk/BMS_customisable/skins/skin_1/images/logo/MASTER%20LOGO_2022%20N-01.png" alt="Greenwich University Logo" width="180" height="60" />
+            </a>
+
+            <div class="dropdown text-end">
+                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                    @User.Identity?.Name
+                </a>
+                <ul class="dropdown-menu text-small">
+                    <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bi bi-person-circle fs-4 me-2"></i>Profile</a></li>
+                    <li>
+                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="nav-link btn btn-link text-dark"><i class="bi bi-door-open fs-4 me-2"></i>Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

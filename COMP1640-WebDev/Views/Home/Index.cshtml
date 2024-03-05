@@ -1,8 +1,22 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-lg-10">
+            <h2 class="text-uppercase fw-bold my-3">Today featured</h2>
+             <partial name="_TodayMagazine"/>
+        </div>
+        <div class="col-lg-2">
+            <partial name="_HomeSidebar"/>
+        </div>
+    </div>
+    <div>
+
+    </div>
 </div>
