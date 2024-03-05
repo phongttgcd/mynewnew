@@ -3,6 +3,7 @@ using COMP1640_WebDev.Ultils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace COMP1640_WebDev.Data
 {
@@ -12,7 +13,11 @@ namespace COMP1640_WebDev.Data
             : base(options)
         {
         }
-
+        public DbSet<User>? Users { get; set; }
+        public DbSet<AcademicYear>? AcademicYears { get; set; }
+        public DbSet<Contribution>? Contributions { get; set; }
+        public DbSet<Faculty>? Faculties { get; set; }
+        public DbSet<Notification>? Notifications { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
