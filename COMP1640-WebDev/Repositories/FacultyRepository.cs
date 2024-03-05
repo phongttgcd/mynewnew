@@ -1,23 +1,50 @@
-﻿using COMP1640_WebDev.Models;
+﻿using COMP1640_WebDev.Data;
+using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace COMP1640_WebDev.Repositories
 {
     public class FacultyRepository : IFacultyRepository
     {
-        public Task<Faculty> CreateFaculty(Faculty faculty)
+        private readonly ApplicationDbContext _dbContext;
+
+        public FacultyRepository(ApplicationDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
         }
 
-        public Task<IEnumerable<Faculty>> GetFaculties()
+        public async Task<Faculty> CreateFaculty(Faculty faculty)
         {
-            throw new NotImplementedException();
+            Faculty facultyToCreate = new()
+            {
+                FacultyName = faculty.FacultyName
+            };
+
+            var result = await _dbContext.Faculties.AddAsync(facultyToCreate);
+            await _dbContext.SaveChangesAsync();
+
+            return result.Entity;
         }
 
-        public Task<Faculty> GetFaculty(string idFaculty)
+        public async Task<IEnumerable<Faculty>> GetFaculties()
         {
-            throw new NotImplementedException();
+            return await _dbContext.Faculties.ToListAsync();
+        }
+
+        public async Task<Faculty?> GetFaculty(string idFaculty)
+        {
+            var facultyInDB = _dbContext.Faculties
+                .Include(i => i.AcademicYears)
+                .Include(u => u.Users)
+                .SingleOrDefault(i => i.Id == idFaculty);
+
+            if (facultyInDB == null)
+            {
+                return null;
+            }
+            
+            return facultyInDB;
         }
 
         public Task<Faculty> RemoveFaculty(string idFaculty)
@@ -25,9 +52,21 @@ namespace COMP1640_WebDev.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Faculty> UpdateFaculty(string idFaculty, Faculty faculty)
+        public async Task<Faculty> UpdateFaculty(string idFaculty, Faculty faculty)
         {
-            throw new NotImplementedException();
+
+            var facultyInDb = await _dbContext.Faculties
+                             .SingleOrDefaultAsync(e => e.Id == idFaculty);
+
+            if (facultyInDb == null)
+            {
+                return null;
+            }
+
+            facultyInDb.FacultyName = faculty.FacultyName;
+            await _dbContext.SaveChangesAsync();
+
+            return faculty;
         }
     }
 }
