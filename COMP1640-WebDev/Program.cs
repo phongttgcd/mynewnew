@@ -1,5 +1,7 @@
 using COMP1640_WebDev.Data;
 using COMP1640_WebDev.Models;
+using COMP1640_WebDev.Repositories;
+using COMP1640_WebDev.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +17,10 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IFacultyRepository, FacultyRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
 
 
 var app = builder.Build();
