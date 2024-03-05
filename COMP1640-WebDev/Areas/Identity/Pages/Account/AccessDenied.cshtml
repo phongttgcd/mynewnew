@@ -4,7 +4,55 @@
     ViewData["Title"] = "Access denied";
 }
 
+<style>
+    body {
+        background-color: #eeeee4; 
+        font-family: Arial, sans-serif;
+
+    .text-danger {
+        color: black !important; 
+    }
+
+    .border {
+        text-align: left;
+        padding: 200px;
+        border-radius: 5px;
+        color: black;
+    }
+
+    .btn {
+        background-color: blue;
+        color: white; 
+        border: none; 
+        padding: 10px 20px; 
+        cursor: pointer; 
+        border-radius: 5px; 
+    }
+</style>
+
 <header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">Con cặc mi không có quyền.</p>
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div class="border">
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <i class="bi bi-file-lock" style="font-size: 46px;"></i>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <h1 class="text-danger" style="font-size: 50px;">Access denied</h1>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <p class="text-danger" style="font-size: 18px;">
+                    You can not access this page.
+                    Contact the administrator to get permissions or access the home page and browse other pages.
+                </p>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <button class="btn" type="submit" onclick="window.location.href='/'">Go To Home</button>
+            </div>
+
+
+
+        </div>
+    </div>
 </header>
+
+
