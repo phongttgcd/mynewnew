@@ -1,9 +1,14 @@
-﻿namespace COMP1640_WebDev.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace COMP1640_WebDev.Models
 {
     public class Faculty
     {
-        public int FacultyID { get; set; }
-        public string FacultyName { get; set; }
+        [Key] 
+        public string Id { get; set; }=string.Empty;
+        public string FacultyName { get; set; } = string.Empty;
+        public List<User>? Users { get; set; }
+        public List<AcademicYear>? AcademicYears { get; set; }  
     }
 
 }

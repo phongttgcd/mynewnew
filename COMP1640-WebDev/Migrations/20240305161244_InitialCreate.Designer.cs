@@ -4,16 +4,19 @@ using COMP1640_WebDev.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace COMP1640_WebDev.Data.Migrations
+namespace COMP1640_WebDev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240305161244_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,124 @@ namespace COMP1640_WebDev.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("COMP1640_WebDev.Models.ApplicationUser", b =>
+            modelBuilder.Entity("COMP1640_WebDev.Models.AcademicYear", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ClosureDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FacultyId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("FinalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacultyId");
+
+                    b.ToTable("AcademicYear");
+                });
+
+            modelBuilder.Entity("COMP1640_WebDev.Models.Contribution", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AcademicYearId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CommentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AcademicYearId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Contribution");
+                });
+
+            modelBuilder.Entity("COMP1640_WebDev.Models.Faculty", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FacultyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Faculty");
+                });
+
+            modelBuilder.Entity("COMP1640_WebDev.Models.Notification", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContributionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContributionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notification");
+                });
+
+            modelBuilder.Entity("COMP1640_WebDev.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -34,12 +154,19 @@ namespace COMP1640_WebDev.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FacultyID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -75,6 +202,8 @@ namespace COMP1640_WebDev.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FacultyID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -116,35 +245,35 @@ namespace COMP1640_WebDev.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "967e0328-7245-4df9-be2a-8fcf23712040",
+                            Id = "e4246a0d-00f6-4b7d-bed8-0625498a2cc9",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "47c2db1d-b7df-4a99-820f-9dbdcad849cc",
+                            Id = "1073ad4f-b739-4b07-b4fd-95faf602478b",
                             ConcurrencyStamp = "2",
                             Name = "Marketing Manager",
                             NormalizedName = "Marketing Manager"
                         },
                         new
                         {
-                            Id = "40cd385a-e072-46eb-8277-d6a0c0280c99",
+                            Id = "2e536ab8-8f59-4517-9783-2f709aebbfd7",
                             ConcurrencyStamp = "3",
                             Name = "Marketing Coordinator",
                             NormalizedName = "Marketing Coordinator"
                         },
                         new
                         {
-                            Id = "be1d7430-3158-4cb1-8486-cda4f007a06d",
+                            Id = "dcdbd22f-a700-425e-ac85-828c4cfb1a33",
                             ConcurrencyStamp = "4",
                             Name = "Student",
                             NormalizedName = "Student"
                         },
                         new
                         {
-                            Id = "03f4e885-2e5e-4937-9227-a261f458e05c",
+                            Id = "7429def9-d625-40c9-af95-56aa8d3b0f72",
                             ConcurrencyStamp = "5",
                             Name = "Guest",
                             NormalizedName = "Guest"
@@ -261,6 +390,64 @@ namespace COMP1640_WebDev.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("COMP1640_WebDev.Models.AcademicYear", b =>
+                {
+                    b.HasOne("COMP1640_WebDev.Models.Faculty", "Faculty")
+                        .WithMany("AcademicYears")
+                        .HasForeignKey("FacultyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
+                });
+
+            modelBuilder.Entity("COMP1640_WebDev.Models.Contribution", b =>
+                {
+                    b.HasOne("COMP1640_WebDev.Models.AcademicYear", "AcademicYear")
+                        .WithMany()
+                        .HasForeignKey("AcademicYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("COMP1640_WebDev.Models.User", "User")
+                        .WithMany("Contributions")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("AcademicYear");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("COMP1640_WebDev.Models.Notification", b =>
+                {
+                    b.HasOne("COMP1640_WebDev.Models.Contribution", "Contribution")
+                        .WithMany()
+                        .HasForeignKey("ContributionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("COMP1640_WebDev.Models.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contribution");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("COMP1640_WebDev.Models.User", b =>
+                {
+                    b.HasOne("COMP1640_WebDev.Models.Faculty", "Faculty")
+                        .WithMany("Users")
+                        .HasForeignKey("FacultyID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -272,7 +459,7 @@ namespace COMP1640_WebDev.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("COMP1640_WebDev.Models.ApplicationUser", null)
+                    b.HasOne("COMP1640_WebDev.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -281,7 +468,7 @@ namespace COMP1640_WebDev.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("COMP1640_WebDev.Models.ApplicationUser", null)
+                    b.HasOne("COMP1640_WebDev.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -296,7 +483,7 @@ namespace COMP1640_WebDev.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("COMP1640_WebDev.Models.ApplicationUser", null)
+                    b.HasOne("COMP1640_WebDev.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -305,11 +492,25 @@ namespace COMP1640_WebDev.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("COMP1640_WebDev.Models.ApplicationUser", null)
+                    b.HasOne("COMP1640_WebDev.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("COMP1640_WebDev.Models.Faculty", b =>
+                {
+                    b.Navigation("AcademicYears");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("COMP1640_WebDev.Models.User", b =>
+                {
+                    b.Navigation("Contributions");
+
+                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }
