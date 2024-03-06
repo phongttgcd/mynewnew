@@ -1,6 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+
 @{
     var indexActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Index", StringComparison.OrdinalIgnoreCase);
     var accountsActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "AccountsManagement", StringComparison.OrdinalIgnoreCase);
