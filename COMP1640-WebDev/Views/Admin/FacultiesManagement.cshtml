@@ -3,6 +3,82 @@
 }
 
 
+<style>
+    .table-3d {
+        border-collapse: separate;
+        border-spacing: 0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.19);
+        transition: transform 0.3s ease;
+    }
+
+        .table-3d:hover {
+            transform: rotateY(10deg);
+        }
+
+        .table-3d th,
+        .table-3d td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            background-color: #ffffff;
+        }
+
+        .table-3d th {
+            background-color: #f2f2f2;
+        }
+
+</style>
+
 <div class="px-4 mt-4 min-vh-100">
-    <h1 class="text-center">Faculties Management</h1>
+    <h1 class="admin-heading">Faculties Management</h1>
+
+    <div class="table-responsive">
+        <table class="table table-3d table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Faculty Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>John Doe</td>
+                    <td class="d-flex justify-content-center">
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#actionModal">
+                            <i class="bi bi-gear"></i> Select Action
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Jane Smith</td>
+                    <td class="d-flex justify-content-center">
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#actionModal">
+                            <i class="bi bi-gear"></i> Select Action
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Select Action</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <button class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</button>
+                    <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
