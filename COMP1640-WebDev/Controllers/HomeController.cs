@@ -1,25 +1,29 @@
-using COMP1640_WebDev.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.IO.Compression;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.Collections.Generic;
+using COMP1640_WebDev.Models;
 using System.Diagnostics;
 
-namespace COMP1640_WebDev.Controllers
+namespace up_down.Controllers
 {
-
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public HomeController(IWebHostEnvironment hostEnvironment)
         {
-            _logger = logger;
+            _hostEnvironment = hostEnvironment;
         }
-
         public IActionResult Index()
         {
             return View();
         }
 
+      
+
+      
         public IActionResult Privacy()
         {
             return View();

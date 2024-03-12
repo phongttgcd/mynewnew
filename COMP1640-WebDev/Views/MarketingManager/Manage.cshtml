@@ -1,0 +1,39 @@
+﻿@model List<string>
+@{
+    ViewData["Title"] = "Manage Files";
+}
+
+
+
+<h2>Manage Uploaded Files</h2>
+
+<a href="@Url.Action("DownloadZip", "MarketingManager")" class="btn btn-primary">
+    Download All Files as ZIP
+</a>
+
+@if (!Model.Any())
+{
+    <p>No files have been uploaded.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model)
+            {
+                <tr>
+                    <td>@file</td>
+                    <td>
+                        <a href="@Url.Action("DownloadZip", "MarketingManager", new { file = file })" class="btn btn-primary">Download</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
