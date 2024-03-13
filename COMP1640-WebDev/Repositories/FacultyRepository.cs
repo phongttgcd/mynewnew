@@ -1,6 +1,7 @@
 ﻿using COMP1640_WebDev.Data;
 using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace COMP1640_WebDev.Repositories
@@ -14,10 +15,12 @@ namespace COMP1640_WebDev.Repositories
             _dbContext = dbContext;
         }
 
+        //1. Create new faculty
         public async Task<Faculty> CreateFaculty(Faculty faculty)
         {
             Faculty facultyToCreate = new()
             {
+                Id = faculty.Id,
                 FacultyName = faculty.FacultyName
             };
 
@@ -27,11 +30,14 @@ namespace COMP1640_WebDev.Repositories
             return result.Entity;
         }
 
+        //2. Get faculty list
         public async Task<IEnumerable<Faculty>> GetFaculties()
         {
             return await _dbContext.Faculties.ToListAsync();
         }
 
+
+        //3. Get faculty by id
         public async Task<Faculty?> GetFaculty(string idFaculty)
         {
             var facultyInDB = _dbContext.Faculties
@@ -46,12 +52,23 @@ namespace COMP1640_WebDev.Repositories
             
             return facultyInDB;
         }
-
-        public Task<Faculty> RemoveFaculty(string idFaculty)
+        
+        //4. Delete faculty
+        public async Task<Faculty> RemoveFaculty(string idFaculty)
         {
-            throw new NotImplementedException();
+            var facultyToRemove = await _dbContext.Faculties.FindAsync(idFaculty);
+            if (facultyToRemove == null)
+            {
+                return null; 
+            }
+
+            _dbContext.Faculties.Remove(facultyToRemove);
+            await _dbContext.SaveChangesAsync();
+
+            return facultyToRemove;
         }
 
+        //5. Update faculty
         public async Task<Faculty> UpdateFaculty(string idFaculty, Faculty faculty)
         {
 
@@ -63,6 +80,7 @@ namespace COMP1640_WebDev.Repositories
                 return null;
             }
 
+            facultyInDb.FacultyName = faculty.Id;
             facultyInDb.FacultyName = faculty.FacultyName;
             await _dbContext.SaveChangesAsync();
 
