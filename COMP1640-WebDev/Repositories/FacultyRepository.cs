@@ -1,7 +1,6 @@
 ﻿using COMP1640_WebDev.Data;
 using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace COMP1640_WebDev.Repositories
@@ -15,7 +14,7 @@ namespace COMP1640_WebDev.Repositories
             _dbContext = dbContext;
         }
 
-        //1. Create new faculty
+        //1. Function to create new faculty
         public async Task<Faculty> CreateFaculty(Faculty faculty)
         {
             Faculty facultyToCreate = new()
@@ -30,14 +29,14 @@ namespace COMP1640_WebDev.Repositories
             return result.Entity;
         }
 
-        //2. Get faculty list
+        //2. Function to get faculty list
         public async Task<IEnumerable<Faculty>> GetFaculties()
         {
             return await _dbContext.Faculties.ToListAsync();
         }
 
 
-        //3. Get faculty by id
+        //3. Function to get faculty by id
         public async Task<Faculty?> GetFaculty(string idFaculty)
         {
             var facultyInDB = _dbContext.Faculties
@@ -53,7 +52,7 @@ namespace COMP1640_WebDev.Repositories
             return facultyInDB;
         }
         
-        //4. Delete faculty
+        //4. Function to delete faculty by id 
         public async Task<Faculty> RemoveFaculty(string idFaculty)
         {
             var facultyToRemove = await _dbContext.Faculties.FindAsync(idFaculty);
@@ -69,7 +68,7 @@ namespace COMP1640_WebDev.Repositories
             return facultyToRemove;
         }
 
-        //5. Update faculty
+        //5. Function to update faculty by id
         public async Task<Faculty> UpdateFaculty(string idFaculty, Faculty faculty)
         {
 

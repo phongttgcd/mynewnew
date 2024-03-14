@@ -2,10 +2,7 @@
 using COMP1640_WebDev.Repositories.Interfaces;
 using COMP1640_WebDev.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace COMP1640_WebDev.Controllers
 {
@@ -130,7 +127,7 @@ namespace COMP1640_WebDev.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSemester(AcademicYearViewModel semesterViewModel)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 await _academicYearRepository.CreateAcademicYear(semesterViewModel) ;
                 TempData["AlertMessage"] = "Semester created successfully!!!";

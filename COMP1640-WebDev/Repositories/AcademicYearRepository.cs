@@ -3,8 +3,6 @@ using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
 using COMP1640_WebDev.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Plugins;
-using System;
 
 namespace COMP1640_WebDev.Repositories
 {
@@ -16,6 +14,8 @@ namespace COMP1640_WebDev.Repositories
         {
             _dbContext = dbContext;
         }
+
+        // 1. Function to create academic year
         public async Task<AcademicYear> CreateAcademicYear(AcademicYearViewModel viewModel)
         {
             AcademicYear academicYearToCreate = new()
@@ -32,6 +32,7 @@ namespace COMP1640_WebDev.Repositories
             return result.Entity;
         }
 
+        // 2. Function to get academic year by id
         public async Task<AcademicYear>? GetAcademicYear(string idAcademicYear)
         {
             var academicYearInDB = _dbContext.AcademicYears
@@ -46,11 +47,13 @@ namespace COMP1640_WebDev.Repositories
             return academicYearInDB;
         }
 
+        // 3. Function to get a list of academic year
         public async Task<IEnumerable<AcademicYear>> GetAcademicYears()
         {
             return await _dbContext.AcademicYears.ToListAsync();
         }
 
+        // 4. Function to return academic year view model
         public AcademicYearViewModel GetAcademicYearViewModel()
         {
             var viewModel = new AcademicYearViewModel()
@@ -60,6 +63,8 @@ namespace COMP1640_WebDev.Repositories
             return viewModel;
         }
 
+
+        // 5. Function to remove academic year by id.
         public async Task<AcademicYear> RemoveAcademicYear(string idAcademicYear)
         {
             var academicYearToRemove = await _dbContext.AcademicYears.FindAsync(idAcademicYear);
@@ -75,6 +80,8 @@ namespace COMP1640_WebDev.Repositories
             return academicYearToRemove;
         }
 
+
+        // 6. Function to update academic year
         public async Task<AcademicYear> UpdateAcademicYear(AcademicYearViewModel academicYearViewModel)
         {
             var academicYearInDb = await _dbContext.AcademicYears
@@ -96,6 +103,8 @@ namespace COMP1640_WebDev.Repositories
             return academicYearInDb;
         }
 
+
+        // 7. Function to get academic year view model by id
         public AcademicYearViewModel GetAcademicYearViewModelByID(string idAcademicYear)
         {
             var academicYearInDb = _dbContext.AcademicYears.SingleOrDefault(t => t.Id == idAcademicYear);

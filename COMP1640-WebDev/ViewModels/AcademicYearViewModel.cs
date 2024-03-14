@@ -1,4 +1,5 @@
 ﻿using COMP1640_WebDev.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace COMP1640_WebDev.ViewModels
 {
