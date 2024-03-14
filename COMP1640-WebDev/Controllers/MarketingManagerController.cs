@@ -4,6 +4,7 @@ using System.IO.Compression;
 namespace COMP1640_WebDev.Controllers
 {
 
+    
     public class MarketingManagerController : Controller
     {
         private readonly IWebHostEnvironment _hostEnvironment;

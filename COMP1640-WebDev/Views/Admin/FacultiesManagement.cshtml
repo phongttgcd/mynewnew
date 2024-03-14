@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Faculty>
 
 @{
-    Layout = "_AdminLayout";
+    Layout = "./Layout/_AdminLayout";
 }
 
 <style>
@@ -40,7 +40,7 @@
     </div>
 
     <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-primary" asp-controller="Admin" asp-action="CreateFaculty"><i class="bi bi-plus-circle me-2"></i>Add Faculty</a>
+        <a class="btn btn-primary" asp-controller="Admin" asp-action="CreateFaculty"><i class="bi bi-plus-circle me-2"></i>Add new faculty</a>
     </div>
 
     @if (TempData["AlertMessage"] != null)
@@ -64,7 +64,7 @@
                     @foreach (var faculty in Model)
                     {
                         <tr>
-                            <td>@faculty.Id</td>
+                            <th scope="row">@faculty.Id</th>
                             <td>@faculty.FacultyName</td>
                             <td class="d-flex justify-content-center">
                                 <a class="btn btn-primary me-3" asp-controller="Admin" asp-action="EditFaculty" asp-route-id=@faculty.Id><i class="bi bi-pencil-square me-2"></i>Edit</a>

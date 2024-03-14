@@ -57,9 +57,10 @@ namespace COMP1640_WebDev.Repositories
         public async Task<Faculty> RemoveFaculty(string idFaculty)
         {
             var facultyToRemove = await _dbContext.Faculties.FindAsync(idFaculty);
+
             if (facultyToRemove == null)
             {
-                return null; 
+                throw new ArgumentNullException(nameof(facultyToRemove), "Faculty to remove cannot be null.");
             }
 
             _dbContext.Faculties.Remove(facultyToRemove);
@@ -86,5 +87,6 @@ namespace COMP1640_WebDev.Repositories
 
             return faculty;
         }
+
     }
 }

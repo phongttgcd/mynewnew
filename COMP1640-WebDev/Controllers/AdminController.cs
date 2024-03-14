@@ -1,8 +1,11 @@
 ﻿using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
+using COMP1640_WebDev.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace COMP1640_WebDev.Controllers
 {
@@ -11,10 +14,12 @@ namespace COMP1640_WebDev.Controllers
     {
         private readonly IFacultyRepository _facultyRepository;
         private readonly IUserRepository _userRepository;
-        public AdminController(IFacultyRepository facultyRepository, IUserRepository userRepository)
+        private readonly IAcademicYearRepository _academicYearRepository;
+        public AdminController(IFacultyRepository facultyRepository, IUserRepository userRepository, IAcademicYearRepository academicYearRepository)
         {
             _facultyRepository = facultyRepository;
             _userRepository = userRepository;
+            _academicYearRepository = academicYearRepository;
         }
 
         //1. Index Methods
@@ -89,8 +94,6 @@ namespace COMP1640_WebDev.Controllers
             return View(updateFaculty);
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> DeleteFaculty(string id)
         {
@@ -109,9 +112,75 @@ namespace COMP1640_WebDev.Controllers
         }
 
         //3. Semesters Management Methods
-        public IActionResult SemestersManagement()
+        [HttpGet]
+        public async Task<IActionResult> SemestersManagement()
         {
+            var semesters = await _academicYearRepository.GetAcademicYears();
+            return View(semesters);
+        }
+
+        [HttpGet]
+        public IActionResult CreateSemester()
+        {
+            var semesterViewModel = _academicYearRepository.GetAcademicYearViewModel();
+            return View(semesterViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateSemester(AcademicYearViewModel semesterViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _academicYearRepository.CreateAcademicYear(semesterViewModel) ;
+                TempData["AlertMessage"] = "Semester created successfully!!!";
+                return RedirectToAction("SemestersManagement");
+            }
+
             return View();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteSemester(string id)
+        {
+            var removedSemester = await _academicYearRepository.RemoveAcademicYear(id);
+
+            if (removedSemester == null)
+            {
+                TempData["AlertMessage"] = "Error: Unable to delete semester. Semester not found or some other error occurred.";
+            }
+            else
+            {
+                TempData["AlertMessage"] = "Success: Semester deleted successfully!";
+            }
+
+            return RedirectToAction("SemestersManagement");
+        }
+
+        [HttpGet]
+        public IActionResult EditSemester(string id)
+        {
+            var academicYear = _academicYearRepository.GetAcademicYearViewModelByID(id);
+            if (academicYear == null)
+            {
+                return NotFound();
+            }
+
+            return View(academicYear);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSemester(AcademicYearViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _academicYearRepository.UpdateAcademicYear(viewModel);
+                TempData["AlertMessage"] = "Semester updated successfully!!!";
+                return RedirectToAction("SemestersManagement");
+            }
+            return View(viewModel);
+        }
+
     }
 }

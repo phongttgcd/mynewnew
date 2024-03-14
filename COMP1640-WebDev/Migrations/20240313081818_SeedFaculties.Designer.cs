@@ -4,6 +4,7 @@ using COMP1640_WebDev.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace COMP1640_WebDev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240313081818_SeedFaculties")]
+    partial class SeedFaculties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,58 +112,6 @@ namespace COMP1640_WebDev.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Faculties");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "ENG",
-                            FacultyName = "Faculty of Engineering"
-                        },
-                        new
-                        {
-                            Id = "MED",
-                            FacultyName = "Faculty of Medicine"
-                        },
-                        new
-                        {
-                            Id = "LAW",
-                            FacultyName = "Faculty of Law"
-                        },
-                        new
-                        {
-                            Id = "BUS",
-                            FacultyName = "Faculty of Business Administration"
-                        },
-                        new
-                        {
-                            Id = "ART",
-                            FacultyName = "Faculty of Arts and Humanities"
-                        },
-                        new
-                        {
-                            Id = "SCI",
-                            FacultyName = "Faculty of Science"
-                        },
-                        new
-                        {
-                            Id = "EDU",
-                            FacultyName = "Faculty of Education"
-                        },
-                        new
-                        {
-                            Id = "SOC",
-                            FacultyName = "Faculty of Social Sciences"
-                        },
-                        new
-                        {
-                            Id = "IT",
-                            FacultyName = "Faculty of Information Technology"
-                        },
-                        new
-                        {
-                            Id = "AGR",
-                            FacultyName = "Faculty of Agriculture"
-                        });
                 });
 
             modelBuilder.Entity("COMP1640_WebDev.Models.Notification", b =>
