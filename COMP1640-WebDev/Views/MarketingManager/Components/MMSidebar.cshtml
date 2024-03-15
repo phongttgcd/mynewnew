@@ -2,6 +2,10 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    var indexActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Index", StringComparison.OrdinalIgnoreCase);
+    var magazinesActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "MagazinesManagement", StringComparison.OrdinalIgnoreCase);
+    var dataActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "DataManagement", StringComparison.OrdinalIgnoreCase);
+    var policiesActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Policies", StringComparison.OrdinalIgnoreCase);
 }
 
 <nav class="nav gap-1 flex-lg-column nav-pills mb-4 px-3 py-3 justify-content-lg-center">

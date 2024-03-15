@@ -1,7 +1,12 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+
 @{
+    var indexActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Index", StringComparison.OrdinalIgnoreCase);
+    var postsActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "PostsManagement", StringComparison.OrdinalIgnoreCase);
+	var facultiesActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Faculties", StringComparison.OrdinalIgnoreCase);
+    var policiesActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Policies", StringComparison.OrdinalIgnoreCase);
 }
 
 <nav class="nav gap-1 flex-lg-column nav-pills mb-4 px-3 py-3 justify-content-lg-center">
@@ -10,6 +15,7 @@
     <a class="nav-link text-white"><i class="bi bi-archive fs-4 me-2 "></i>Falculties</a>
     <a class="nav-link text-white"><i class="bi bi-book fs-4 me-2"></i>Policies</a>
 </nav>
+
 
 
 @* <div class="vh-100 d-none d-lg-block"></div> *@
