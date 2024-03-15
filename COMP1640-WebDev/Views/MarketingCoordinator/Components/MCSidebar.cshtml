@@ -10,10 +10,10 @@
 }
 
 <nav class="nav gap-1 flex-lg-column nav-pills mb-4 px-3 py-3 justify-content-lg-center">
-    <a class="nav-link text-white"><i class="bi bi-bar-chart fs-4 me-2"></i>Dashboard</a>
-    <a class="nav-link text-white"><i class="bi bi-mailbox fs-4 me-2"></i>Posts Management</a>
-    <a class="nav-link text-white"><i class="bi bi-archive fs-4 me-2 "></i>Falculties</a>
-    <a class="nav-link text-white"><i class="bi bi-book fs-4 me-2"></i>Policies</a>
+    <a class="nav-link text-white @(indexActive ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Index"><i class="bi bi-bar-chart fs-4 me-2"></i>Dashboard</a>
+    <a class="nav-link text-white @(postsActive ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="PostsManagement"><i class="bi bi-mailbox fs-4 me-2"></i>Posts Management</a>
+    <a class="nav-link text-white @(facultiesActive ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Faculties"><i class="bi bi-archive fs-4 me-2 "></i>Falculties</a>
+    <a class="nav-link text-white @(policiesActive ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Policies"><i class="bi bi-book fs-4 me-2"></i>Policies</a>
 </nav>
 
 
