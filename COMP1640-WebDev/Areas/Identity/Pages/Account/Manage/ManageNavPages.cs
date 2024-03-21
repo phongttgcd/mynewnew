@@ -11,33 +11,7 @@ using COMP1640_WebDev.Data;
 
 namespace  COMP1640_WebDev.Areas.Identity.Pages.Account.Manage
 {
-    public class RegisterModel : PageModel
-    {
-        private readonly ApplicationDbContext _context;
-
-        public RegisterModel(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public List<Faculty> Faculties { get; set; }
-
-        [BindProperty]
-        public User UserModel { get; set; }
-
-        public void OnGet()
-        {
-            // Lấy danh sách Faculty từ cơ sở dữ liệu
-            Faculties = _context.Faculties.ToList();
-        }
-
-        public IActionResult OnPost()
-        {
-            // Xử lý logic đăng ký tại đây
-            // UserModel chứa thông tin được nhập từ form
-            return Page();
-        }
-    }
+  
     /// <summary>
     ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
     ///     directly from your code. This API may change or be removed in future releases.

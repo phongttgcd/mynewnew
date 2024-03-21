@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading;
+using System.Text;
 using System.Threading.Tasks;
+using COMP1640_WebDev.Data;
+using COMP1640_WebDev.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using COMP1640_WebDev.Models;
@@ -13,9 +14,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using COMP1640_WebDev.Data;
+
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace COMP1640_WebDev.Areas.Identity.Pages.Account
@@ -29,33 +31,35 @@ namespace COMP1640_WebDev.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly ApplicationDbContext _context;
-
-        public SelectList RoleSelectList { get; set; }
-        public List<Faculty> Faculties { get; set; }
-
-        [BindProperty]
-        public string SelectedFacultyId { get; set; }
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _dbContext;
 
         public RegisterModel(
-            ApplicationDbContext context,
             UserManager<User> userManager,
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
+            RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
+            ApplicationDbContext dbContext,
             IEmailSender emailSender)
+
         {
-            _context = context;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _logger = logger;
+            _dbContext = dbContext;
             _emailSender = emailSender;
+
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
+
+        public SelectList RoleSelectList { get; set; }
+        public SelectList FacultySelectList { get; set; }
         public string ReturnUrl { get; set; }
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
@@ -63,22 +67,20 @@ namespace COMP1640_WebDev.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "The passwords do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [Display(Name = "Faculty")]
-            public string FacultyID { get; set; }
+            [Required]
+            public string FacultyId { get; set; }
 
             [Required]
             public string Role { get; set; }
@@ -88,18 +90,8 @@ namespace COMP1640_WebDev.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (Faculties == null)
-            {
-                Faculties = new List<Faculty>();
-            }
-            Faculties = _context.Faculties.ToList();
-
-            // Tạo danh sách vai trò từ Utils.Role và loại bỏ vai trò "Admin"
-            var roles = typeof(COMP1640_WebDev.Ultils.Role).GetFields().Select(f => f.GetValue(null).ToString()).ToList();
-            roles.Remove(COMP1640_WebDev.Ultils.Role.ADMIN);
-            RoleSelectList = new SelectList(roles);
+            PrepareRoleAndFacultySelectLists();
         }
-
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
@@ -107,16 +99,20 @@ namespace COMP1640_WebDev.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                var user = new User
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    FacultyId = Input.FacultyId,
+                    CreatedTime = DateTime.UtcNow
+                };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
+                 _logger.LogInformation("User created a new account with password.");
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -138,27 +134,39 @@ namespace COMP1640_WebDev.Areas.Identity.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
+
+
+                    var roleResult = await _userManager.AddToRoleAsync(user, Input.Role);
+                    if (!roleResult.Succeeded)
+                    {
+                        AddErrors(roleResult);
+                        PrepareRoleAndFacultySelectLists();
+                        return Page();
+                    }
+
+                    _logger.LogInformation("User assigned to the role {Role}.", Input.Role);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
                 }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                AddErrors(result);
             }
 
+            // If we got this far, something failed, redisplay form
+            PrepareRoleAndFacultySelectLists();
             return Page();
         }
 
-        private User CreateUser()
+        private void PrepareRoleAndFacultySelectLists()
         {
-            try
+            RoleSelectList = new SelectList(_roleManager.Roles.ToList(), nameof(IdentityRole.Name), nameof(IdentityRole.Name));
+            FacultySelectList = new SelectList(_dbContext.Faculties.ToList(), nameof(Faculty.Id), nameof(Faculty.FacultyName));
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
             {
-                return Activator.CreateInstance<User>();
-            }
-            catch
-            {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(Models.User)}'. " +
-                    $"Ensure that '{nameof(Models.User)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+                ModelState.AddModelError(string.Empty, error.Description);
             }
         }
 

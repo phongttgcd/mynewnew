@@ -42,16 +42,13 @@
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="SelectedFacultyId" class="form-label">Faculty</label>
-                        <select asp-for="SelectedFacultyId" class="form-control">
+                        <label asp-for="Input.FacultyId" class="form-label">Faculty</label>
+                        <select asp-for="Input.FacultyId" asp-items="Model.FacultySelectList" class="form-control">
                             <option value="">-- Select Faculty --</option>
-                            @foreach (var faculty in Model.Faculties)
-                            {
-                                <option value="@faculty.Id">@faculty.FacultyName</option>
-                            }
                         </select>
-                        <span asp-validation-for="SelectedFacultyId" class="text-danger"></span>
+                        <span asp-validation-for="Input.FacultyId" class="text-danger"></span>
                     </div>
+
                     <div class="mb-3">
                         <label asp-for="Input.Role" class="form-label">Role</label>
                         <select asp-for="Input.Role" class="form-control" asp-items="@Model.RoleSelectList">
