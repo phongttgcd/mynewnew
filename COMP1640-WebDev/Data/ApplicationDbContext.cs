@@ -25,6 +25,7 @@ public class ApplicationDbContext : IdentityDbContext<User>
         base.OnModelCreating(builder);
         SeedRoles(builder);
         SeedFaculties(builder);
+
     }
 
     private void SeedFaculties(ModelBuilder builder)
