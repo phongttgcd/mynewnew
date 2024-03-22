@@ -1,27 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Text;
-using System.Threading.Tasks;
 using COMP1640_WebDev.Data;
 using COMP1640_WebDev.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using COMP1640_WebDev.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace COMP1640_WebDev.Areas.Identity.Pages.Account
 {
+    [Authorize(Roles = "Admin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
@@ -66,17 +59,23 @@ namespace COMP1640_WebDev.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
-            public string Email { get; set; }
+            public required string Email { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            public string Password { get; set; }
+            public required string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The passwords do not match.")]
-            public string ConfirmPassword { get; set; }
+            public required string ConfirmPassword { get; set; }
+
+            [Required]
+            public required string FacultyId { get; set; }
+
+            [Required]
+            public required string Role { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -105,7 +104,7 @@ namespace COMP1640_WebDev.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                 _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("User created a new account with password.");
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
