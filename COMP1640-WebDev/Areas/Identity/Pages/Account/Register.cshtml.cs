@@ -80,12 +80,12 @@ namespace COMP1640_WebDev.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            PrepareRoleAndFacultySelectLists();
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            PrepareRoleAndFacultySelectLists();
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -104,7 +104,9 @@ namespace COMP1640_WebDev.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                 _logger.LogInformation("User created a new account with password.");
+                    IdentityResult roleresult = await _userManager.AddToRoleAsync(user, Input.Role);
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -127,18 +129,6 @@ namespace COMP1640_WebDev.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
 
-
-                    var roleResult = await _userManager.AddToRoleAsync(user, Input.Role);
-                    if (!roleResult.Succeeded)
-                    {
-                        AddErrors(roleResult);
-                        PrepareRoleAndFacultySelectLists();
-                        return Page();
-                    }
-
-                    _logger.LogInformation("User assigned to the role {Role}.", Input.Role);
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
                 }
                 AddErrors(result);
             }

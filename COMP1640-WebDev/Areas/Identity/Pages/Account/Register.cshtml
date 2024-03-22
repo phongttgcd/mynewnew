@@ -6,7 +6,7 @@
 
 <style>
     .backgroundContainer {
-        background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20211011/pngtree-modern-liquid-gradient-colors-abstract-background-design-template-for-brochures-flyers-image_910976.png");
+        background-image: url("https://4kwallpapers.com/images/wallpapers/macos-big-sur-apple-layers-fluidic-colorful-wwdc-stock-4096x2304-1455.jpg");
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -22,24 +22,9 @@
         <div class="card shadow-lg mx-auto bg-dark text-light">
             <div class="card-body">
                 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                    <h4 class="card-title text-center mb-4 text-light-50">CREATE ACCOUNT</h4>
+                    <h4 class="card-title text-center mb-4 text-light-50">REGISTER</h4>
                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                     <hr class="border border-light border-2" />
-
-                 @*    <div class="row gx-2">
-                        <div class="col-6 mb-3">
-                            <label class="form-label">First name</label>
-                            <input type="text"
-                                   class="form-control"
-                                   placeholder="First name" />
-                        </div>
-                        <div class="col-6 mb-3">
-                            <label class="form-label">Last name</label>
-                            <input type="text"
-                                   class="form-control"
-                                   placeholder="Last name" />
-                        </div>
-                    </div> *@
 
                     <div class="mb-3">
                         <label asp-for="Input.Email" class="form-label">Email</label>
@@ -57,7 +42,6 @@
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-
                         <label asp-for="Input.FacultyId" class="form-label">Faculty</label>
                         <select asp-for="Input.FacultyId" asp-items="Model.FacultySelectList" class="form-control">
                             <option value="">-- Select Faculty --</option>
@@ -74,15 +58,6 @@
                     </div>
 
 
-                    @* <div class="mb-4">
-                        <label class="form-check">
-                            <input type="checkbox" class="form-check-input" />
-                            <span class="form-check-label">
-                                I agree to the terms and conditions
-                            </span>
-                        </label>
-                    </div> *@
-
 
                     <div class="mb-4">
                         <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-outline-secondary">
@@ -90,30 +65,6 @@
                         </button>
                     </div>
                 </form>
-                <p class="text-center mb-2">
-                    Already have account ?
-                    <a asp-page="./Login" class="text-decoration-none ms-1">
-                    Sign In
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-@* 
- <div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
         </div>
     </div>
@@ -121,4 +72,4 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-} *@
+}
