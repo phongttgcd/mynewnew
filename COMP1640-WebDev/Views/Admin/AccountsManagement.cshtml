@@ -1,6 +1,5 @@
-﻿@using Microsoft.AspNetCore.Identity
-@model IEnumerable<User>
-@inject UserManager<User> UserManager
+﻿@using COMP1640_WebDev.ViewModels
+@model IEnumerable<UsersViewModel>
 
 @{
     Layout = "./Layout/_AdminLayout";
@@ -35,12 +34,12 @@
 </style>
 
 <div class="px-4 mt-4 min-vh-100">
-    <div class="mb-3 title-AM border">
+    <div class="mb-3 title-AM">
         <h1 class="admin-heading">Accounts Management</h1>
     </div>
 
     <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-plus-circle me-2"></i>Register Account</a>
+        <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-plus-circle me-2"></i>Create New Account</a>
     </div>
 
     <div class="table-responsive">
@@ -50,7 +49,7 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Faculty</th>
-                    <th>Comfirmed</th>
+                    <th>Role</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -59,10 +58,10 @@
                 {
 
                     <tr>
-                        <th>@user.UserName</th>
+                        <th>@user.Username</th>
                         <td>@user.Email</td>
-                        <td>@user.FacultyId</td>
-                        <td>@user.EmailConfirmed</td>
+                        <td>@user.Faculty</td>
+                        <td>@user.Role</td>
                         <td class="d-flex justify-content-center">
                             <a class="btn btn-primary me-3" asp-controller="Admin" asp-action="" asp-route-id=><i class="bi bi-pencil-square me-2"></i>Edit</a>
                             <button class="btn btn-danger delete-faculty" data-faculty-id="" data-bs-toggle="modal" data-bs-target="#actionModal"><i class="bi bi-trash me-2"></i>Delete</button>

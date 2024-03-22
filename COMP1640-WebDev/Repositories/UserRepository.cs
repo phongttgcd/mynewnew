@@ -1,6 +1,7 @@
 ﻿using COMP1640_WebDev.Data;
 using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
+using COMP1640_WebDev.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,25 +17,9 @@ namespace COMP1640_WebDev.Repositories
             _userManager = userManager;
         }
 
-        public async Task<User> CreateUser(User user)
+        public Task<User> GetUser(string idUser)
         {
-            User userToCreate = new()
-            {
-                UserName = user.UserName,
-                Email= user.Email,
-                PhoneNumber= user.PhoneNumber,
-                CreatedTime = DateTime.Now,
-            };
-
-            var result = await _dbContext.Users.AddAsync(userToCreate);
-            await _dbContext.SaveChangesAsync();
-
-            return result.Entity;
-        }
-
-        public async Task<User> GetUser(string idUser)
-        {
-            var userInDB = _dbContext.Users
+          /*  var userInDB = _dbContext.UserList
               .Include(i => i.Faculty)
               .Include(u => u.Contributions)
               .Include(y => y.Notifications)
@@ -45,35 +30,27 @@ namespace COMP1640_WebDev.Repositories
                 return null;
             }
 
-            return userInDB;
+            return userInDB;*/
+            throw new NotImplementedException();
+
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public IEnumerable<UsersViewModel> GetAllUsers()
         {
-            return await _dbContext.Users.ToListAsync();
+            var users = _userManager.Users.Select(c => new UsersViewModel()
+            {
+                Username = c.UserName,
+                Email = c.Email,
+                Faculty = c.Faculty.FacultyName,
+                Role = string.Join(",", _userManager.GetRolesAsync(c).Result.ToArray())
+            }).ToList();
+
+            return users;
         }
 
         public Task<User> RemoveUser(string idUser)
         {
             throw new NotImplementedException();
-        }
-
-        public async Task<User> UpdateUser(string idUser, User user)
-        {
-            var userInDb = await _dbContext.Users
-                 .SingleOrDefaultAsync(e => e.Id == idUser);
-
-            if (userInDb == null)
-            {
-                return null;
-            }
-
-            userInDb.UserName = user.UserName;
-            userInDb.Email = user.Email;
-            userInDb.PhoneNumber = user.PhoneNumber;
-            await _dbContext.SaveChangesAsync();
-
-            return user;
         }
     }
 }
