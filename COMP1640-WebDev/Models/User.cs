@@ -7,7 +7,7 @@ namespace COMP1640_WebDev.Models
     public class User : IdentityUser
     {
         [ForeignKey("Faculty")]
-        public string? FacultyID { get; set; }
+        public string? FacultyId { get; set; }
         public Faculty? Faculty { get; set; }
         public DateTime CreatedTime { get; set; }
         public List<Notification>? Notifications { get; set; }

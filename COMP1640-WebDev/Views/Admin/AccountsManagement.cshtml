@@ -27,24 +27,17 @@
         .table-3d th {
             background-color: #f2f2f2;
         }
+    .title-AM{
+        text-align: center;
+    }
+
 
 </style>
 
 <div class="px-4 mt-4 min-vh-100">
-    <div class="mb-3">
+    <div class="mb-3 title-AM border">
         <h1 class="admin-heading">Accounts Management</h1>
     </div>
-
-    <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-plus-circle me-2"></i>Add new account</a>
-    </div>
-
-    @if (TempData["AlertMessage"] != null)
-    {
-        <div class="alert alert-success" role="alert">
-            @TempData["AlertMessage"]
-        </div>
-    }
 
     <div class="table-responsive">
         <table class="table table-3d table-striped">

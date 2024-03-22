@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using COMP1640_WebDev.Models;
 using System.Diagnostics;
 
-namespace up_down.Controllers
+namespace COMP1640_WebDev.Controllers
 {
     public class HomeController : Controller
     {

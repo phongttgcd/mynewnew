@@ -17,7 +17,6 @@
     }
 </style>
 
-
 <div class="backgroundContainer min-vh-100">
     <div class="container py-5">
         <div class="card shadow-lg mx-auto bg-dark text-light">
@@ -42,12 +41,6 @@
                         </div>
                     </div> *@
 
-                  @*   <div class="mb-3">
-                        <label asp-for="Input.Username" class="form-label">Username</label>
-                        <input asp-for="Input.Username" autocomplete="username" aria-required="true" placeholder="name@example.com" type="email" class="form-control" />
-                        <span asp-validation-for="Input.Username" class="text-danger"></span>
-                    </div> *@
-
                     <div class="mb-3">
                         <label asp-for="Input.Email" class="form-label">Email</label>
                         <input asp-for="Input.Email" autocomplete="username" aria-required="true" placeholder="name@example.com" type="email" class="form-control" />
@@ -60,28 +53,24 @@
                     </div>
                     <div class="mb-3">
                         <label asp-for="Input.ConfirmPassword" class="form-label">Repeat password</label>
-                        <input asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" placeholder="password" class="form-control"/>
+                        <input asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" placeholder="password" class="form-control" />
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.FacultyId" class="form-label">Faculty</label>
+                        <select asp-for="Input.FacultyId" asp-items="Model.FacultySelectList" class="form-control">
+                            <option value="">-- Select Faculty --</option>
+                        </select>
+                        <span asp-validation-for="Input.FacultyId" class="text-danger"></span>
+                    </div>
 
-
-                 @*    <div class="mb-3">
-                        <label asp-for="Input.Role"></label>
-                        <select asp-for="Input.Role" class="form-control"
-                                asp-items="@Model.RoleSelectList">
+                    <div class="mb-3">
+                        <label asp-for="Input.Role" class="form-label">Role</label>
+                        <select asp-for="Input.Role" class="form-control" asp-items="@Model.RoleSelectList">
                             <option value="">-- Select Role --</option>
                         </select>
                         <span asp-validation-for="Input.Role" class="text-danger"></span>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="Input.Faculty" class="form-label"></label>
-                        <select asp-for="Input.Faculty" class="form-select"
-                                asp-items="@Model.FacultySelectList">
-                            <option value="">-- Select Faculty --</option>
-                        </select>
-                        <span asp-validation-for="Input.Faculty" class="text-danger"></span>
-                    </div> *@
-
 
                     @* <div class="mb-4">
                         <label class="form-check">
@@ -99,13 +88,12 @@
                         </button>
                     </div>
                 </form>
-
-              @*   <p class="text-center mb-2">
+                <p class="text-center mb-2">
                     Already have account ?
                     <a asp-page="./Login" class="text-decoration-none ms-1">
                     Sign In
                     </a>
-                </p> *@
+                </p>
             </div>
         </div>
     </div>
@@ -125,20 +113,9 @@
                 <label asp-for="Input.Email">Email</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
+        </div>
     </div>
-</div> *@
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
