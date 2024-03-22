@@ -5,7 +5,7 @@ using System.IO.Compression;
 namespace COMP1640_WebDev.Controllers
 {
 
-    [Authorize(Roles = "Marketing Manager")]
+/*    [Authorize(Roles = "Marketing Manager")]*/
     public class MarketingManagerController : Controller
     {
         private readonly IWebHostEnvironment _hostEnvironment;
