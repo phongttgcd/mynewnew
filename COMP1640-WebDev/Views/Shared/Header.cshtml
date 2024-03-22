@@ -40,12 +40,28 @@
             </a>
 
             <div class="dropdown text-end">
-                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
                     @User.Identity?.Name
                 </a>
                 <ul class="dropdown-menu text-small">
-                    <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bi bi-person-circle fs-4 me-2"></i>Profile</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bi bi-person-circle fs-4 me-2"></i>Profile</a></li>
+                    }
+                    else if (User.IsInRole("Marketing Manager"))
+                    {
+                        <li></li>
+                    }
+                    else if (User.IsInRole("Marketing Coordinator"))
+                    {
+                        <li></li>
+
+                    }
+                    else if (User.IsInRole("Student"))
+                    {
+                        <li></li>
+                    }
                     <li>
                         <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                             <button type="submit" class="nav-link btn btn-link text-dark"><i class="bi bi-door-open fs-4 me-2"></i>Logout</button>

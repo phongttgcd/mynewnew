@@ -27,9 +27,11 @@ namespace COMP1640_WebDev.Controllers
 
 
         //2. Account Management Methods
-        public IActionResult AccountsManagement()
+        [HttpGet]
+        public async Task<IActionResult> AccountsManagement()
         {
-            return View();
+            var users = await _userRepository.GetUsers();
+            return View(users);
         }
 
 

@@ -2,16 +2,14 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    var indexActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Index", StringComparison.OrdinalIgnoreCase);
-    var magazinesActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "MagazinesManagement", StringComparison.OrdinalIgnoreCase);
-    var dataActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "DataManagement", StringComparison.OrdinalIgnoreCase);
-    var policiesActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Policies", StringComparison.OrdinalIgnoreCase);
+    var indexActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "MarketingManager", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Index", StringComparison.OrdinalIgnoreCase);
+    var magazinesActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "MarketingManager", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "MagazinesManagement", StringComparison.OrdinalIgnoreCase);
+    var dataActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "MarketingManager", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "DataManagement", StringComparison.OrdinalIgnoreCase);
 }
 
 <nav class="nav gap-1 flex-lg-column nav-pills mb-4 px-3 py-3 justify-content-lg-center">
-    <a class="nav-link text-white" asp-controller="MarketingManager" asp-action="Details"><i class="bi bi-clipboard-data fs-4 me-2"></i>Dashboard</a>
-    <a class="nav-link text-white" asp-controller="MarketingManager" asp-action="Index"><i class="bi bi-newspaper fs-4 me-2"></i>Magazines Management</a>
-    <a class="nav-link text-white"><i class="bi bi-bar-chart fs-4 me-2"></i>Data Management</a>
-    <a class="nav-link text-white"><i class="bi bi-book fs-4 me-2"></i>Policies</a>
+    <a class="nav-link text-white  @(indexActive ? "active" : "")" asp-controller="MarketingManager" asp-action="Index"><i class="bi bi-clipboard-data fs-4 me-2"></i>Dashboard</a>
+    <a class="nav-link text-white  @(magazinesActive ? "active" : "")" asp-controller="MarketingManager" asp-action="MagazinesManagement"><i class="bi bi-newspaper fs-4 me-2"></i>Magazines Management</a>
+    <a class="nav-link text-white  @(dataActive ? "active" : "")" asp-controller="MarketingManager" asp-action="DataManagement"><i class="bi bi-file-earmark-arrow-down fs-4 me-2"></i>Data Management</a>
 </nav>
 @* <div class="vh-100 d-none d-lg-block"></div> *@

@@ -1,18 +1,19 @@
 ﻿using COMP1640_WebDev.Data;
 using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Plugins;
 
 namespace COMP1640_WebDev.Repositories
 {
     public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _dbContext;
-
-        public UserRepository(ApplicationDbContext dbContext)
+        private readonly UserManager<User> _userManager;
+        public UserRepository(ApplicationDbContext dbContext,UserManager<User> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task<User> CreateUser(User user)

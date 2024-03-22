@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
 
 namespace COMP1640_WebDev.Controllers
 {
 
-    
+    [Authorize(Roles = "Marketing Manager")]
     public class MarketingManagerController : Controller
     {
         private readonly IWebHostEnvironment _hostEnvironment;
@@ -18,7 +19,16 @@ namespace COMP1640_WebDev.Controllers
         {
             return View();
         }
-        public IActionResult Details() { return  View(); }
+
+        public IActionResult MagazinesManagement()
+        {
+            return View();
+        }
+
+        public IActionResult DataManagement()
+        {
+            return View();
+        }
 
 
 

@@ -11,12 +11,16 @@
     <partial name="Header" />
     <div class="mainContainer">
         <div class="row">
-            <div class="col-xl-3 col-lg-3 bg-dark rounded-2">
+            <div class="col-xl-3 col-lg-3 bg-dark">
                 <partial name="./Components/MMSideBar" />
             </div>
-            <div class="col-xl-9 col-lg-9 py-3"> @RenderBody()</div>
+            <div class="col-xl-9 col-lg-9 px-0"> @RenderBody()</div>
         </div>
     </div>
 
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
