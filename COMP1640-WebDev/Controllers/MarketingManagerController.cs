@@ -5,7 +5,7 @@ using System.IO.Compression;
 namespace COMP1640_WebDev.Controllers
 {
 
-/*    [Authorize(Roles = "Marketing Manager")]*/
+    /*    [Authorize(Roles = "Marketing Manager")]*/
     public class MarketingManagerController : Controller
     {
         private readonly IWebHostEnvironment _hostEnvironment;
@@ -20,11 +20,20 @@ namespace COMP1640_WebDev.Controllers
             return View();
         }
 
+        // 1. Magazines management
         public IActionResult MagazinesManagement()
         {
             return View();
         }
 
+        public IActionResult CreateMagazine()
+        {
+            return View();
+        }
+
+
+
+        // 2.Download file
         public IActionResult DataManagement()
         {
             return View();

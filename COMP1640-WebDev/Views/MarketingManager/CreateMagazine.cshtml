@@ -1,0 +1,65 @@
+﻿@{
+	Layout = "./Layout/_MMLayout";
+}
+
+<style>
+	.upload-area {
+		border: 2px dashed #ccc;
+		padding: 20px;
+		text-align: center;
+		cursor: pointer;
+	}
+</style>
+
+<div class="px-4 mt-4 min-vh-100">
+	<h1>Create Magazine</h1>
+
+	<form>
+		<div class="form-group mb-2">
+			<label class="control-label">Cover Image</label>
+			<div class="upload-area">
+				<input type="file" id="fileInput" class="form-control-file" accept="image/*" onchange="previewImage(event)" />
+				<p>Drag & drop or <a href="javascript:void(0);" onclick="document.getElementById('fileInput').click()">select</a> image</p>
+			</div>
+			<span class="text-danger"></span>
+		</div>
+
+		<div class="form-group mb-2">
+			<label class="control-label">Title</label>
+			<input class="form-control" />
+			<span class="text-danger"></span>
+		</div>
+		<div class="form-group mb-2">
+			<label class="control-label">Description</label>
+			<textarea class="form-control"></textarea>
+			<span class="text-danger"></span>
+		</div>
+		<div class="form-group mb-2">
+			<label class="control-label">Semester</label>
+			<select class="form-control">
+				<option value="option1">Option 1</option>
+				<option value="option2">Option 2</option>
+				<option value="option3">Option 3</option>
+				<!-- Add more options as needed -->
+			</select>
+			<span class="text-danger"></span>
+		</div>
+
+
+		<div class="form-group">
+			<input type="submit" value="Create" class="btn btn-primary" />
+		</div>
+	</form>
+</div>
+
+<script>
+	function previewImage(event) {
+		var reader = new FileReader();
+		reader.onload = function () {
+			var output = document.getElementById('output');
+			output.src = reader.result;
+		}
+		reader.readAsDataURL(event.target.files[0]);
+	}
+</script>
+
