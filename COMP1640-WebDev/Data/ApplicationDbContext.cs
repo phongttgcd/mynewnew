@@ -19,7 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<Contribution>? Contributions { get; set; }
     public DbSet<Faculty>? Faculties { get; set; }
     public DbSet<Notification>? Notifications { get; set; }
-
+    public DbSet<Magazine>? Magazines { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -100,6 +100,11 @@ public class ApplicationDbContext : IdentityDbContext<User>
                 LockoutEnabled = true
             }
         );
+        builder.Entity<Magazine>(entity =>
+        {
+            entity.Property(e => e.CoverImage).IsUnicode(true); // Configure as Unicode string
+                                                                // ...other configurations...
+        });
 
         builder.Entity<IdentityUserRole<string>>().HasData(
             new IdentityUserRole<string>

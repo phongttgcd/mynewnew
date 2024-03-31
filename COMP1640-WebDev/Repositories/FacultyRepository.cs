@@ -72,8 +72,7 @@ namespace COMP1640_WebDev.Repositories
         public async Task<Faculty> UpdateFaculty(string idFaculty, Faculty faculty)
         {
 
-            var facultyInDb = await _dbContext.Faculties
-                             .SingleOrDefaultAsync(e => e.Id == idFaculty);
+            var facultyInDb = await _dbContext.Faculties.SingleOrDefaultAsync(e => e.Id == idFaculty);
 
             if (facultyInDb == null)
             {

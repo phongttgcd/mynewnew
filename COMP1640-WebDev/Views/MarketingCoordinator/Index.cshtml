@@ -1,8 +1,12 @@
-﻿@{
-    Layout = "./Layout/_MCLayout";
+﻿
+@{
+    Layout = "~/Views/MarketingCoordinator/Layout/_MCLayout.cshtml";
 }
 
-<div class="min-vh-100">
-    <h1 class="text-center">Marketing Coordinator Page</h1>
-    <partial name="Footer" />
+<div class="row">
+    <div class="col">
+        <h1>Welcome, Marketing Coordinator</h1>
+        <!-- Add dashboard widgets or links here -->
+        <a asp-action="Magazines">Manage Magazines</a>
+    </div>
 </div>
