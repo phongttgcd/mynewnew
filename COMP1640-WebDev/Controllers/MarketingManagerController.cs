@@ -32,7 +32,6 @@ namespace COMP1640_WebDev.Controllers
         }
 
 
-
         // 2.Download file
         public IActionResult DataManagement()
         {

@@ -3,13 +3,12 @@
 
 @{
     var indexActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "MarketingCoordinator", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Index", StringComparison.OrdinalIgnoreCase);
-    var magazinesActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "MarketingCoordinator", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "MagazinesManagement", StringComparison.OrdinalIgnoreCase);
+    var magazinesActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "MarketingCoordinator", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "MagazinesManagement", StringComparison.OrdinalIgnoreCase);  
 }
 
 <nav class="nav gap-1 flex-lg-column nav-pills mb-4 px-3 py-3 justify-content-lg-center">
     <a class="nav-link text-white @(indexActive ? "active" : "")" asp-controller="MarketingCoordinator" asp-action="Index"><i class="bi bi-bar-chart fs-4 me-2"></i>Dashboard</a>
-@*     <a class="nav-link text-white @(magazinesActive ? "active" : "")" asp-controller="MarketingCoordinator" asp-action="MagazinesManagement"><i class="bi bi-mailbox fs-4 me-2"></i>Posts Management</a> *@
-    <a class="nav-link @magazinesActive" asp-controller="MarketingCoordinatorController" asp-action="Create"><i class="bi bi-journal"></i> Post Magazine </a>
+    <a class="nav-link text-white @(magazinesActive ? "active" : "")" asp-controller="MarketingCoordinator" asp-action="MagazinesManagement"><i class="bi bi-mailbox fs-4 me-2"></i>Post Management</a> 
 </nav>
 
 
