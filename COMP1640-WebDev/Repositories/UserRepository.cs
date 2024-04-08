@@ -17,28 +17,18 @@ namespace COMP1640_WebDev.Repositories
             _userManager = userManager;
         }
 
-        public Task<User> GetUser(string idUser)
+        public async Task<User> GetUser(string idUser)
         {
-          /*  var userInDB = _dbContext.UserList
-              .Include(i => i.Faculty)
-              .Include(u => u.Contributions)
-              .Include(y => y.Notifications)
-              .SingleOrDefault(i => i.Id == idUser);
 
-            if (userInDB == null)
-            {
-                return null;
-            }
-
-            return userInDB;*/
-            throw new NotImplementedException();
-
+            var user = await _userManager.FindByIdAsync(idUser);
+            return user;
         }
 
         public IEnumerable<UsersViewModel> GetAllUsers()
         {
             var users = _userManager.Users.Select(c => new UsersViewModel()
             {
+                Id = c.Id,
                 Username = c.UserName,
                 Email = c.Email,
                 Faculty = c.Faculty.FacultyName,
@@ -48,9 +38,23 @@ namespace COMP1640_WebDev.Repositories
             return users;
         }
 
-        public Task<User> RemoveUser(string idUser)
+        public async Task<User> RemoveUser(string idUser)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(idUser);
+            if (user == null)
+            {
+                return null; 
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return user; 
+            }
+            else
+            {
+                throw new Exception($"Failed to delete user: {result.Errors.FirstOrDefault()?.Description}");
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ using System.IO.Compression;
 namespace COMP1640_WebDev.Controllers
 {
 
-    /*    [Authorize(Roles = "Marketing Manager")]*/
+    [Authorize(Roles = "Marketing Manager")]
     public class MarketingManagerController : Controller
     {
         private readonly IWebHostEnvironment _hostEnvironment;
@@ -35,13 +35,6 @@ namespace COMP1640_WebDev.Controllers
         // 2.Download file
         public IActionResult DataManagement()
         {
-            return View();
-        }
-
-
-
-        public IActionResult Manage()
-        {
             var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
             var fileModels = Directory.GetFiles(uploadsPath)
                                       .Select(file => Path.GetFileName(file)) // Use LINQ to select file names
@@ -50,7 +43,8 @@ namespace COMP1640_WebDev.Controllers
             return View(fileModels);
         }
 
-        public IActionResult DownloadZip()
+
+        public IActionResult DownloadZip1()
         {
             // Define the path to the uploads directory
             var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
@@ -84,6 +78,30 @@ namespace COMP1640_WebDev.Controllers
 
             // Send the ZIP file to the browser
             return PhysicalFile(tempZipPath, "application/zip", tempZipFileName);
+        }
+
+    
+
+        public IActionResult DownloadSingleFile(string file)
+        {
+            if (string.IsNullOrEmpty(file))
+            {
+                // Handle invalid file name
+                return BadRequest("Invalid file name.");
+            }
+
+            // Define the path to the uploads directory
+            var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+
+            var filePath = Path.Combine(uploadsPath, file);
+            if (!System.IO.File.Exists(filePath))
+            {
+                // Handle case where file doesn't exist
+                return NotFound();
+            }
+
+            // Return the file
+            return PhysicalFile(filePath, "application/octet-stream", file);
         }
     }
 }

@@ -9,14 +9,14 @@
 </head>
 <body>
     <partial name="Header" />
-    <div class="mainContainer">
+    <main>
         <div class="row">
             <div class="col-lg-3 col-xl-3 px-2 bg-dark">
                 <partial name="./Components/MMSideBar" />
             </div>
-            <div class="col-lg-9 col-xl-9 px-0"> @RenderBody()</div>
+            <div class="col-lg-9 col-xl-9 px-0"> @RenderBody()<partial name="Footer" /></div>
         </div>
-    </div>
+    </main>
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

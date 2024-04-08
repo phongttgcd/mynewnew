@@ -34,6 +34,39 @@ namespace COMP1640_WebDev.Controllers
             return View(users);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userRepository.GetUser(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var removedUser = await _userRepository.RemoveUser(id);
+
+            if (removedUser == null)
+            {
+                TempData["AlertMessage"] = "Error: Unable to delete user. User not found or some other error occurred.";
+            }
+            else
+            {
+                TempData["AlertMessage"] = "Success: User deleted successfully!";
+            }
+
+            return RedirectToAction("AccountsManagement");
+        }
+
 
 
 
