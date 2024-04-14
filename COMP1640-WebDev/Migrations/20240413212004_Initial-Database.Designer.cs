@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace COMP1640_WebDev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240331183725_RemoveMagazinesTable")]
-    partial class RemoveMagazinesTable
+    [Migration("20240413212004_Initial-Database")]
+    partial class InitialDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,13 +168,11 @@ namespace COMP1640_WebDev.Migrations
 
             modelBuilder.Entity("COMP1640_WebDev.Models.Magazine", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CoverImage")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")

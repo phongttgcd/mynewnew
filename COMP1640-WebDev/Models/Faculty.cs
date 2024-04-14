@@ -6,7 +6,7 @@ namespace COMP1640_WebDev.Models
     {
         [Key]
         [Required(ErrorMessage = "ID can not be null")]
-        public string Id { get; set; }=string.Empty;
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         [Required(ErrorMessage = "Faculty can not be null")]
         [StringLength(255)]
         public string FacultyName { get; set; } = string.Empty;

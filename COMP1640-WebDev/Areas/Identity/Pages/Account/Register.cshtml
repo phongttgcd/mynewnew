@@ -51,7 +51,7 @@
 
                     <div class="mb-3">
                         <label asp-for="Input.Role" class="form-label">Role</label>
-                        <select asp-for="Input.Role" class="form-control" asp-items="@Model.RoleSelectList">
+                        <select asp-for="Input.Role" class="form-control" asp-items="@Model.RoleSelectList.Where(r => r.Value != "Admin" && r.Value != "Guest")">
                             <option value="">-- Select Role --</option>
                         </select>
                         <span asp-validation-for="Input.Role" class="text-danger"></span>

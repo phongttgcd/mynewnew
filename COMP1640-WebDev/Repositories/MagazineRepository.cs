@@ -21,7 +21,7 @@ namespace COMP1640_WebDev.Repositories
             return await _dbContext.Magazines.ToListAsync();
         }
 
-        public async Task<Magazine> GetMagazine(int id)
+        public async Task<Magazine> GetMagazine(string id)
         {
             return await _dbContext.Magazines
                 .AsNoTracking() // Good practice if you're only reading the entity
@@ -30,21 +30,21 @@ namespace COMP1640_WebDev.Repositories
 
         public async Task<Magazine> CreateMagazine(Magazine magazine)
         {
-            try
+            Magazine magazineToCreate = new()
             {
-                _dbContext.Magazines.Add(magazine);
-                await _dbContext.SaveChangesAsync();
-                return magazine; // The ID will be set by the database after SaveChanges
-            }
-            catch (Exception ex)
-            {
-                // Log the error
-                Console.WriteLine(ex.Message);
-                throw; // Re-throw the exception
-            }
+                Id = magazine.Id,
+                Title = magazine.Title,
+                Description = magazine.Description,
+                FacultyId = magazine.FacultyId,
+                CoverImage = magazine.CoverImage,
+
+            };
+            var result = await _dbContext.Magazines.AddAsync(magazineToCreate);
+            await _dbContext.SaveChangesAsync();
+            return result.Entity;
         }
 
-            public async Task<Magazine> UpdateMagazine(int id, Magazine updatedMagazine)
+            public async Task<Magazine> UpdateMagazine(string id, Magazine updatedMagazine)
         {
             var magazine = await _dbContext.Magazines.FindAsync(id);
             if (magazine == null)
@@ -60,7 +60,7 @@ namespace COMP1640_WebDev.Repositories
             return magazine;
         }
 
-        public async Task<Magazine> RemoveMagazine(int id)
+        public async Task<Magazine> RemoveMagazine(string id)
         {
             var magazine = await _dbContext.Magazines.FindAsync(id);
             if (magazine == null)

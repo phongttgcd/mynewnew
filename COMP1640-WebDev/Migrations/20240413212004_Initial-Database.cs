@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace COMP1640_WebDev.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,15 +28,15 @@ namespace COMP1640_WebDev.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Faculty",
+                name: "Faculties",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FacultyName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    FacultyName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Faculty", x => x.Id);
+                    table.PrimaryKey("PK_Faculties", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,7 +61,7 @@ namespace COMP1640_WebDev.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AcademicYear",
+                name: "AcademicYears",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -72,11 +72,11 @@ namespace COMP1640_WebDev.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AcademicYear", x => x.Id);
+                    table.PrimaryKey("PK_AcademicYears", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AcademicYear_Faculty_FacultyId",
+                        name: "FK_AcademicYears_Faculties_FacultyId",
                         column: x => x.FacultyId,
-                        principalTable: "Faculty",
+                        principalTable: "Faculties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -86,7 +86,7 @@ namespace COMP1640_WebDev.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FacultyID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FacultyId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -107,11 +107,30 @@ namespace COMP1640_WebDev.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Faculty_FacultyID",
-                        column: x => x.FacultyID,
-                        principalTable: "Faculty",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_AspNetUsers_Faculties_FacultyId",
+                        column: x => x.FacultyId,
+                        principalTable: "Faculties",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Magazines",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FacultyId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Magazines", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Magazines_Faculties_FacultyId",
+                        column: x => x.FacultyId,
+                        principalTable: "Faculties",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -200,7 +219,7 @@ namespace COMP1640_WebDev.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Contribution",
+                name: "Contributions",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -217,23 +236,22 @@ namespace COMP1640_WebDev.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Contribution", x => x.Id);
+                    table.PrimaryKey("PK_Contributions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Contribution_AcademicYear_AcademicYearId",
+                        name: "FK_Contributions_AcademicYears_AcademicYearId",
                         column: x => x.AcademicYearId,
-                        principalTable: "AcademicYear",
+                        principalTable: "AcademicYears",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Contribution_AspNetUsers_UserId",
+                        name: "FK_Contributions_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id"
-                        );
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notification",
+                name: "Notifications",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -244,19 +262,19 @@ namespace COMP1640_WebDev.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Notification", x => x.Id);
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notification_AspNetUsers_UserId",
+                        name: "FK_Notifications_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Notification_Contribution_ContributionId",
+                        name: "FK_Notifications_Contributions_ContributionId",
                         column: x => x.ContributionId,
-                        principalTable: "Contribution",
+                        principalTable: "Contributions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -264,16 +282,43 @@ namespace COMP1640_WebDev.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "1073ad4f-b739-4b07-b4fd-95faf602478b", "2", "Marketing Manager", "Marketing Manager" },
-                    { "2e536ab8-8f59-4517-9783-2f709aebbfd7", "3", "Marketing Coordinator", "Marketing Coordinator" },
-                    { "7429def9-d625-40c9-af95-56aa8d3b0f72", "5", "Guest", "Guest" },
-                    { "dcdbd22f-a700-425e-ac85-828c4cfb1a33", "4", "Student", "Student" },
-                    { "e4246a0d-00f6-4b7d-bed8-0625498a2cc9", "1", "Admin", "Admin" }
+                    { "089967f7-aeef-4edb-8fff-b2945b7f67e2", "2", "Marketing Manager", "Marketing Manager" },
+                    { "089967f7-aeef-4edb-8fff-b2945b7f67e3", "3", "Marketing Coordinator", "Marketing Coordinator" },
+                    { "089967f7-aeef-4edb-8fff-b2945b7f67e4", "4", "Student", "Student" },
+                    { "089967f7-aeef-4edb-8fff-b2945b7f67e5", "5", "Guest", "Guest" },
+                    { "089967f7-aeef-4edb-8fff-b2945b7f67ee", "1", "Admin", "Admin" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedTime", "Email", "EmailConfirmed", "FacultyId", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "089967f7-aeef-4edb-8fff-b2945b7f67e1", 0, "d719e974-32f6-4ff1-b45b-5e1f5ca82808", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@gmail.com", true, null, true, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEKP/gJ6XGMLQpnKKGQH7IsGMKoqwwAyh5MGKWcnLP3OBjP/DRkS4PFY1BfiRbVjfWg==", null, false, "VAXURNACT25EQBDVHYPTL7OHXP6OHZXM", false, "admin@gmail.com" });
+
+            migrationBuilder.InsertData(
+                table: "Faculties",
+                columns: new[] { "Id", "FacultyName" },
+                values: new object[,]
+                {
+                    { "AGR", "Faculty of Agriculture" },
+                    { "ART", "Faculty of Arts and Humanities" },
+                    { "BUS", "Faculty of Business Administration" },
+                    { "EDU", "Faculty of Education" },
+                    { "ENG", "Faculty of Engineering" },
+                    { "IT", "Faculty of Information Technology" },
+                    { "LAW", "Faculty of Law" },
+                    { "MED", "Faculty of Medicine" },
+                    { "SCI", "Faculty of Science" },
+                    { "SOC", "Faculty of Social Sciences" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "089967f7-aeef-4edb-8fff-b2945b7f67ee", "089967f7-aeef-4edb-8fff-b2945b7f67e1" });
+
             migrationBuilder.CreateIndex(
-                name: "IX_AcademicYear_FacultyId",
-                table: "AcademicYear",
+                name: "IX_AcademicYears_FacultyId",
+                table: "AcademicYears",
                 column: "FacultyId");
 
             migrationBuilder.CreateIndex(
@@ -309,9 +354,9 @@ namespace COMP1640_WebDev.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_FacultyID",
+                name: "IX_AspNetUsers_FacultyId",
                 table: "AspNetUsers",
-                column: "FacultyID");
+                column: "FacultyId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -321,23 +366,28 @@ namespace COMP1640_WebDev.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contribution_AcademicYearId",
-                table: "Contribution",
+                name: "IX_Contributions_AcademicYearId",
+                table: "Contributions",
                 column: "AcademicYearId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contribution_UserId",
-                table: "Contribution",
+                name: "IX_Contributions_UserId",
+                table: "Contributions",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notification_ContributionId",
-                table: "Notification",
+                name: "IX_Magazines_FacultyId",
+                table: "Magazines",
+                column: "FacultyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_ContributionId",
+                table: "Notifications",
                 column: "ContributionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notification_UserId",
-                table: "Notification",
+                name: "IX_Notifications_UserId",
+                table: "Notifications",
                 column: "UserId");
         }
 
@@ -360,22 +410,25 @@ namespace COMP1640_WebDev.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Notification");
+                name: "Magazines");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Contribution");
+                name: "Contributions");
 
             migrationBuilder.DropTable(
-                name: "AcademicYear");
+                name: "AcademicYears");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Faculty");
+                name: "Faculties");
         }
     }
 }

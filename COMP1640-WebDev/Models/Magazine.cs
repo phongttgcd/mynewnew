@@ -6,7 +6,7 @@ namespace COMP1640_WebDev.Models
     public class Magazine
     {
         [Key]
-        public int Id { get; set; } 
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         [Required(ErrorMessage ="Title of magazine can not be null")]
         [StringLength(255)]
         public string? Title {  get; set; } 
