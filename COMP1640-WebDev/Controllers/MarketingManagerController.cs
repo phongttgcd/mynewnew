@@ -57,6 +57,7 @@ namespace COMP1640_WebDev.Controllers
         {
             return View();
         }
+
 		[HttpGet]
 		public async Task<IActionResult> CreateMagazine()
         {

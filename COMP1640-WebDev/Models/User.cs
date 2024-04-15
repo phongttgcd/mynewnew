@@ -6,6 +6,9 @@ namespace COMP1640_WebDev.Models
 {
     public class User : IdentityUser
     {
+        [Required(ErrorMessage = "Username is required")]
+        [StringLength(255)]
+        public override string? UserName { get; set; } 
         [ForeignKey("Faculty")]
         public string? FacultyId { get; set; }
         public Faculty? Faculty { get; set; }

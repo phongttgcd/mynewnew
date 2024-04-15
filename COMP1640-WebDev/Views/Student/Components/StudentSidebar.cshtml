@@ -1,0 +1,17 @@
+﻿@{
+    var indexActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "Index", StringComparison.OrdinalIgnoreCase);
+    var accountsActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "AccountsManagement", StringComparison.OrdinalIgnoreCase);
+    var facultiesActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "FacultiesManagement", StringComparison.OrdinalIgnoreCase);
+    var semestersActive = string.Equals(ViewContext.RouteData.Values["Controller"] as string, "Admin", StringComparison.OrdinalIgnoreCase) && string.Equals(ViewContext.RouteData.Values["Action"] as string, "SemestersManagement", StringComparison.OrdinalIgnoreCase);
+}
+
+<nav class="nav gap-1 flex-lg-column nav-pills mb-4 px-3 py-3 justify-content-lg-center">
+    <a class="nav-link text-white @(indexActive ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Index"><i class="bi bi-bar-chart-line fs-4 me-2"></i></i>Dashboard</a>
+    <a class="nav-link text-white @(accountsActive ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="AccountsManagement"><i class="bi bi-people fs-4 me-2"></i>Accounts Management</a>
+    <a class="nav-link text-white @(facultiesActive ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="FacultiesManagement"><i class="bi bi-tags fs-4 me-2"></i>Faculties Management</a>
+    <a class="nav-link text-white @(semestersActive ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="SemestersManagement"><i class="bi bi-calendar-day fs-4 me-2"></i>Semesters Management</a>
+</nav>
+
+
+@* <div class="vh-100 d-none d-lg-block"></div>
+ *@
