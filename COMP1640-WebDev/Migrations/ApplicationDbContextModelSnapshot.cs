@@ -67,9 +67,9 @@ namespace COMP1640_WebDev.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
+                    b.Property<byte[]>("Image")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("bit");
@@ -168,9 +168,10 @@ namespace COMP1640_WebDev.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CoverImage")
+                    b.Property<byte[]>("CoverImage")
+                        .IsRequired()
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace COMP1640_WebDev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240413212004_Initial-Database")]
-    partial class InitialDatabase
+    [Migration("20240415173416_initial-database")]
+    partial class initialdatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,9 +70,9 @@ namespace COMP1640_WebDev.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
+                    b.Property<byte[]>("Image")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("bit");
@@ -171,9 +171,10 @@ namespace COMP1640_WebDev.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CoverImage")
+                    b.Property<byte[]>("CoverImage")
+                        .IsRequired()
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");

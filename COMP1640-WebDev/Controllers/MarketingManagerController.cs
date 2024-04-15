@@ -39,6 +39,20 @@ namespace COMP1640_WebDev.Controllers
         }
 
         // 1. Magazines management
+
+        // 6 - View Book Details
+        [HttpGet]
+        public async Task<IActionResult> DetailsMagazine(string id) 
+        {
+            var result = await _magazineRepository.GetMagazine(id);
+
+            string imageBase64Data = Convert.ToBase64String(result.CoverImage);
+            string image = string.Format("data:image/jpg;base64, {0}", imageBase64Data);
+            ViewBag.Image = image;
+
+            return View(result);
+        }
+
         public IActionResult MagazinesManagement()
         {
             return View();
@@ -57,36 +71,29 @@ namespace COMP1640_WebDev.Controllers
 
 		[HttpPost]
 		public async Task<IActionResult> CreateMagazine(MagazineViewModel magazine, List<IFormFile> files)
-		{   
+        {
             var userId = _userManager.GetUserId(User);
-            var uploadPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
-            var newFileName = "";
-            foreach (var file in files)
-            {
-                if (file.Length > 0)
-                {
-					newFileName = Guid.NewGuid().ToString() + file.FileName;
-					var filePath = Path.Combine(uploadPath, newFileName);
-                    
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-                }
-            }
+
+            Magazine newMagazine = new();
             var user = await _userRepository.GetUser(userId);
-			var academicYear = await _academicYearRepository.GetAcademicYear(magazine.AcademicYearId);
-			await _magazineRepository.CreateMagazine(new Magazine {
-                FacultyId = user.FacultyId,
-                Title = magazine.Title,
-                Description = magazine.Description,
-                CoverImage = "~/images/" + newFileName,
-			});
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await files[0].CopyToAsync(memoryStream);
+                newMagazine.FacultyId = user.FacultyId;
+                newMagazine.Title = magazine.Title;
+                newMagazine.Description = magazine.Description;
+                newMagazine.CoverImage = memoryStream.ToArray();
+            };
+
+
+            await _magazineRepository.CreateMagazine(newMagazine);
 
             TempData["AlertMessage"] = "Created successfully!!!";
 
 
             return RedirectToAction("MagazinesManagement");
+
 		}
 
 
