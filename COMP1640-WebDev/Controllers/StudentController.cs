@@ -40,5 +40,11 @@ namespace COMP1640_WebDev.Controllers
             ViewBag.Message = "Files uploaded successfully.";
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Details()
+        {
+            return View();
+        }
     }
 }

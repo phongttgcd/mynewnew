@@ -43,6 +43,7 @@ namespace COMP1640_WebDev.Controllers
         {
             return View();
         }
+
 		[HttpGet]
 		public async Task<IActionResult> CreateMagazine()
         {
@@ -56,9 +57,7 @@ namespace COMP1640_WebDev.Controllers
 
 		[HttpPost]
 		public async Task<IActionResult> CreateMagazine(MagazineViewModel magazine, List<IFormFile> files)
-		{
-
-            
+		{   
             var userId = _userManager.GetUserId(User);
             var uploadPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
             var newFileName = "";
@@ -82,7 +81,6 @@ namespace COMP1640_WebDev.Controllers
                 Title = magazine.Title,
                 Description = magazine.Description,
                 CoverImage = "~/images/" + newFileName,
-
 			});
 
             TempData["AlertMessage"] = "Created successfully!!!";

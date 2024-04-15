@@ -4,6 +4,7 @@ using COMP1640_WebDev.Repositories.Interfaces;
 using COMP1640_WebDev.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
 
 namespace COMP1640_WebDev.Repositories
 {
@@ -55,6 +56,48 @@ namespace COMP1640_WebDev.Repositories
             {
                 throw new Exception($"Failed to delete user: {result.Errors.FirstOrDefault()?.Description}");
             }
+        }
+
+        public async Task<User> EditUser(string idUser, User user)
+        {
+            var userInDb = await _userManager.FindByIdAsync(idUser);
+
+            if (userInDb == null)
+            {
+                return null;
+            }
+
+            userInDb.Id = user.Id;
+            userInDb.UserName = user.UserName;
+            await _dbContext.SaveChangesAsync();
+
+            return user;
+        }
+
+        public IEnumerable<UsersViewModel> SearchUsers(string attribute, string value)
+        {
+            var users = GetAllUsers(); 
+            if (!string.IsNullOrEmpty(attribute) && !string.IsNullOrEmpty(value))
+            {
+                switch (attribute)
+                {
+                    case "Username":
+                        users = users.Where(u => u.Username != null && u.Username.Contains(value));
+                        break;
+                    case "Email":
+                        users = users.Where(u => u.Email != null && u.Email.Contains(value));
+                        break;
+                    case "Faculty":
+                        users = users.Where(u => u.Faculty != null && u.Faculty.Contains(value));
+                        break;
+                    case "Role":
+                        users = users.Where(u => u.Role != null && u.Role.Contains(value));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return users;
         }
     }
 }

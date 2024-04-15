@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "./Layout/_MCLayout";
+}
+
+<style>
+    .table-3d {
+        border-collapse: separate;
+        border-spacing: 0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.19);
+        transition: transform 0.3s ease;
+    }
+
+        .table-3d:hover {
+            transform: rotateY(10deg);
+        }
+
+        .table-3d th,
+        .table-3d td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            background-color: #ffffff;
+        }
+
+        .table-3d th {
+            background-color: #f2f2f2;
+        }
+
+</style>
+
+<div class="px-4 mt-4 min-vh-100">
+    <div class="mb-3">
+        <h1 class="mc-heading">Contributions Management</h1>
+    </div>
+    @if (TempData["AlertMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["AlertMessage"]
+        </div>
+    }
+
+
+    <div class="table-responsive">
+        <table class="table table-3d table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Contribution Name</th>
+                    <th>Student Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+               
+            </tbody>
+        </table>
+    </div>
+</div>

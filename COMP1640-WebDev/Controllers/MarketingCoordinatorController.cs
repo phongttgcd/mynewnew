@@ -16,5 +16,10 @@ namespace COMP1640_WebDev.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public IActionResult PostManagement()
+        {
+            return View();
+        }
     }
 }

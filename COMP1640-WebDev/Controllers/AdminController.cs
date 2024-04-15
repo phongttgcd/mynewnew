@@ -34,6 +34,15 @@ namespace COMP1640_WebDev.Controllers
             return View(users);
         }
 
+
+        [HttpGet]
+        public IActionResult Search(string attribute, string value)
+        {
+            var users = _userRepository.SearchUsers(attribute, value); 
+
+            return View("AccountsManagement", users); 
+        }
+
         [HttpGet]
         public async Task<IActionResult> EditUser(string id)
         {
@@ -49,6 +58,19 @@ namespace COMP1640_WebDev.Controllers
             }
 
             return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(string id, User updatedUser)
+        {
+            if (ModelState.IsValid)
+            {
+                await _userRepository.EditUser(id,updatedUser);
+                TempData["AlertMessage"] = "Username updated successfully!!!";
+                return RedirectToAction("AccountsManagement");
+            }
+            return View(updatedUser);
         }
 
         public async Task<IActionResult> DeleteUser(string id)
