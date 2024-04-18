@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace COMP1640_WebDev.Migrations
 {
     /// <inheritdoc />
-    public partial class initialdatabase : Migration
+    public partial class Initial_database : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -86,9 +86,9 @@ namespace COMP1640_WebDev.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     FacultyId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -121,11 +121,17 @@ namespace COMP1640_WebDev.Migrations
                     Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CoverImage = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    FacultyId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    FacultyId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AcademicYearId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Magazines", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Magazines_AcademicYears_AcademicYearId",
+                        column: x => x.AcademicYearId,
+                        principalTable: "AcademicYears",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Magazines_Faculties_FacultyId",
                         column: x => x.FacultyId,
@@ -374,6 +380,11 @@ namespace COMP1640_WebDev.Migrations
                 name: "IX_Contributions_UserId",
                 table: "Contributions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Magazines_AcademicYearId",
+                table: "Magazines",
+                column: "AcademicYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Magazines_FacultyId",

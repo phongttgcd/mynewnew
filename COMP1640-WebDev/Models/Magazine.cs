@@ -21,6 +21,11 @@ namespace COMP1640_WebDev.Models
         public Faculty? Faculty { get; set; }
 
 
- 
-    }
+		[Display(Name = "AcademicYear")]
+		[ForeignKey("AcademicYear")]
+		public string? AcademicYearId { get; set; }
+		public AcademicYear? AcademicYear { get; set; }
+
+
+	}
 }
