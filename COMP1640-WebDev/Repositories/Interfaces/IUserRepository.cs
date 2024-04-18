@@ -10,6 +10,6 @@ namespace COMP1640_WebDev.Repositories.Interfaces
         Task<User> RemoveUser(string idUser);
         Task<User> EditUser(string idUser, User user);
         IEnumerable<UsersViewModel> SearchUsers(string attribute, string value);
-
+        Task<int[]> GetUserCounts();
     }
 }

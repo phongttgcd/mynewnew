@@ -4,8 +4,129 @@
     Layout = "./Layout/_StudentLayout";
 }
 
-<div class="px-4 mt-4 min-vh-100">
-    <div class="mb-3">
-        <h1 class="admin-heading">Dashboard</h1>
+
+@{
+    var articles = new[]
+           {
+        new
+        {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+          new
+        {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+          new
+        {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+          new
+        {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+          new
+        {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+        new
+         {
+            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
+            Title = "Magazine Title",
+            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+            LastUpdated = "Last updated 3 mins ago"
+        },
+    };
+}
+
+
+<style>
+    .articleCard {
+        max-width: 540px;
+        transition: transform 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease, border 0.3s ease;
+    }
+
+        .articleCard:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 6px 15px rgba(0, 0, 0, 0.1), 0 15px 25px rgba(0, 0, 0, 0.1);
+        }
+
+    .imageArticle {
+        height: 100%;
+        width: 100%;
+    }
+
+    .section-title {
+        margin-bottom: 15px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #FFFFFF;
+        border: 1px solid #dee2e6;
+        border-left: 5px solid #FFCC00
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="section-title">
+            <h4 class="m-0 text-uppercase fw-bold">Latest Magazines</h4>
+            <a class="text-secondary fw-lighter text-decoration-none" href="">View All</a>
+        </div>
     </div>
+    @foreach (var article in articles)
+    {
+        <div class="col-lg-6">
+            <a class="text-decoration-none text-dark" asp-controller="Home" asp-action="Index">
+                <div class="articleCard card mb-4">
+                    <div class="row g-0">
+                        <div class="col-md-6">
+                            <img src="@article.ImageUrl" class="imageArticle img-thumbnail rounded-start" alt="Image">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h5 class="card-title">@article.Title</h5>
+                                <p class="card-text">@article.Description</p>
+                                <p class="card-text"><small class="text-muted">@article.LastUpdated</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
 </div>
+
+
+@* <h2>Upload Files</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">@ViewBag.Message</div>
+}
+
+<form asp-action="Index" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="file">Choose files to upload:</label>
+        <input type="file" name="files" multiple class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Upload</button>
+</form>
+ *@
+

@@ -2,6 +2,7 @@
 using COMP1640_WebDev.Repositories.Interfaces;
 using COMP1640_WebDev.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,12 +25,22 @@ namespace COMP1640_WebDev.Controllers
         }
 
         //1. Index Methods
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
+            // Retrieve dynamic data from the database or any other source
+            var facultiesData = new int[] { 30, 20, 10 }; // Sample data, replace with actual data
+            int[] usersData = await _userRepository.GetUserCounts();
+            var semestersData = new int[] { 20, 15, 25 }; // Sample data, replace with actual data
+
+            // Pass the data to the view
+            ViewBag.FacultiesData = facultiesData;
+            ViewBag.UsersData = usersData;
+            ViewBag.SemestersData = semestersData;
+
             return View();
         }
 
-
+   
         //2. Account Management Methods
         [HttpGet]
         public IActionResult AccountsManagement()
