@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using COMP1640_WebDev.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace COMP1640_WebDev.Models
@@ -21,6 +22,9 @@ namespace COMP1640_WebDev.Models
         public DateTime SubmissionDate { get; set; }=DateTime.Now;
         public bool IsEnabled { get; set; }
         public bool IsSelected { get; set; }
+
+        public BrowserComment Status { get; set; } = BrowserComment.InProgess;
+
         public string Comment { get; set; } = string.Empty;
         public DateTime CommentDate { get; set; }
     }

@@ -23,6 +23,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
 builder.Services.AddScoped<IMagazineRepository, MagazineRepository>();
+builder.Services.AddScoped<IContributionRepository, ContributionRepository>();
 
 
 var app = builder.Build();

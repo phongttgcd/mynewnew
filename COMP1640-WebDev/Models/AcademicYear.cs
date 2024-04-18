@@ -17,5 +17,7 @@ namespace COMP1640_WebDev.Models
         public DateTime ClosureDate { get; set; }
         public DateTime StartDate { get; set; }
 
-    }
+		public List<Magazine>? Magazines { get; set; }
+
+	}
 }

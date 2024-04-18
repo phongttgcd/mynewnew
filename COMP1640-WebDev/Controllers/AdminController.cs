@@ -3,6 +3,8 @@ using COMP1640_WebDev.Repositories.Interfaces;
 using COMP1640_WebDev.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace COMP1640_WebDev.Controllers
 {
@@ -12,11 +14,13 @@ namespace COMP1640_WebDev.Controllers
         private readonly IFacultyRepository _facultyRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAcademicYearRepository _academicYearRepository;
-        public AdminController(IFacultyRepository facultyRepository, IUserRepository userRepository, IAcademicYearRepository academicYearRepository)
+        private readonly IContributionRepository _contributionRepository;
+        public AdminController(IFacultyRepository facultyRepository, IUserRepository userRepository, IAcademicYearRepository academicYearRepository, IContributionRepository contributionRepository)
         {
             _facultyRepository = facultyRepository;
             _userRepository = userRepository;
             _academicYearRepository = academicYearRepository;
+            _contributionRepository = contributionRepository;
         }
 
         //1. Index Methods
@@ -238,5 +242,8 @@ namespace COMP1640_WebDev.Controllers
             return View(viewModel);
         }
 
-    }
+
+
+
+	}
 }

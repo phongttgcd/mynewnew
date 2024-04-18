@@ -65,7 +65,9 @@ namespace COMP1640_WebDev.Controllers
 			var user = await _userRepository.GetUser(userId);
 			var faculty = await _facultyRepository.GetFaculty(user.FacultyId);
 
-			ViewBag.AcademicYears = faculty.AcademicYears;
+			var sortedAcademicYears = faculty.AcademicYears.OrderByDescending(ay => ay.StartDate).ToList();
+
+			ViewBag.AcademicYearId = sortedAcademicYears[0].Id;
 			return View();
         }
 
@@ -81,6 +83,7 @@ namespace COMP1640_WebDev.Controllers
             {
                 await files[0].CopyToAsync(memoryStream);
                 newMagazine.FacultyId = user.FacultyId;
+                newMagazine.AcademicYearId = magazine.AcademicYearId;
                 newMagazine.Title = magazine.Title;
                 newMagazine.Description = magazine.Description;
                 newMagazine.CoverImage = memoryStream.ToArray();
