@@ -5,6 +5,7 @@ using COMP1640_WebDev.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 
 namespace COMP1640_WebDev.Controllers
@@ -37,17 +38,11 @@ namespace COMP1640_WebDev.Controllers
 			return View();
 		}
 
-        [HttpGet]
+        /*[HttpGet]
         public async Task<IActionResult> AddCommentAsync()
         {
-            var userId = _userManager.GetUserId(User);
-            var user = await _userRepository.GetUser(userId);
-            var faculty = await _facultyRepository.GetFaculty(user.FacultyId);
-            var sortedAcademicYears = faculty.AcademicYears.OrderByDescending(ay => ay.StartDate).ToList();
 
-            ViewBag.AcademicYearId = sortedAcademicYears[0].Id;
-            return View();
-        }
+        }*/
 
         // Method to handle the submission of a new comment
         [HttpPost]

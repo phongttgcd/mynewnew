@@ -6,46 +6,50 @@
 	Layout = "./Layout/_MMLayout";
 }
 
-<style>
-	.upload-area {
-		border: 2px dashed #ccc;
-		padding: 20px;
-		text-align: center;
-		cursor: pointer;
-	}
-</style>
 
 <div class="px-4 mt-4 min-vh-100">
 	<h1>Create Magazine</h1>
 
-	<form method="post" enctype="multipart/form-data">
+	<form asp-action="CreateMagazine" method="post" enctype="multipart/form-data">
+		@Html.AntiForgeryToken()
 		<div class="form-group mb-2">
-		@* 	<label class="control-label">Cover Image</label>
-			<div class="upload-area">
-				<input type="file" id="fileInput" class="form-control-file" accept="image/*" onchange="previewImage(event)" />
-				<p>Drag & drop or <a href="javascript:void(0);" onclick="document.getElementById('fileInput').click()">select</a> image</p>
-			</div>
-			<span class="text-danger"></span> *@
-
-			<label for="file">Choose files to upload:</label>
-			<input type="file" name="files" multiple class="form-control" />
+			<label asp-for="@Model.FormFile">Choose files to upload:</label>
+			<input asp-for="@Model.FormFile" type="file" class="form-control" />
 		</div>
 
 		<div class="form-group mb-2">
-			<label asp-for="Title" class="control-label">Title</label>
-			<input asp-for="Title" class="form-control" />
-			<span asp-validation-for="Title" class="text-danger"></span>
+			<label asp-for="Magazine!.Title" class="control-label">Title</label>
+			<input asp-for="Magazine!.Title" class="form-control" />
+			<span asp-validation-for="Magazine!.Title" class="text-danger"></span>
 		</div>
+
+	@* 	Tan Phong Sua label ben duoi thanh Description *@
 		<div class="form-group mb-2">
-			<label asp-for="Description" class="control-label">Title</label>
-			<input asp-for="Description" class="form-control" />
-			<span asp-validation-for="Description" class="text-danger"></span>
+			<label asp-for="Magazine!.Description" class="control-label">Title</label>
+			<input asp-for="Magazine!.Description" class="form-control" />
+			<span asp-validation-for="Magazine!.Description" class="text-danger"></span>
+		</div>
+
+		<div class="form-group mb-2">
+			<label>Faculty</label>
+			<select asp-for="Magazine!.FacultyId"
+					asp-items="@(new SelectList(Model.Falulties, "Id", "FacultyName"))"
+					class="form-control">
+			</select>
+			<span asp-validation-for="Magazine!.FacultyId" class="text-danger"></span>
+
+		</div>
+
+		<div class="form-group mb-2">
+			<label>Semester</label>
+			<select asp-for="Magazine!.AcademicYearId"
+					asp-items="@(new SelectList(Model.AcademicYears, "Id", "StartDate"))"
+					class="form-control">
+			</select>
+			<span asp-validation-for="Magazine!.AcademicYearId" class="text-danger"></span>
 		</div>
 
 
-
-		<input asp-for="AcademicYearId" hidden value=@ViewBag.AcademicYearId class="form-control" />
-			
 
 		<div class="form-group">
 			<input type="submit" value="Create" class="btn btn-primary" />
@@ -53,14 +57,5 @@
 	</form>
 </div>
 
-<script>
-	function previewImage(event) {
-		var reader = new FileReader();
-		reader.onload = function () {
-			var output = document.getElementById('output');
-			output.src = reader.result;
-		}
-		reader.readAsDataURL(event.target.files[0]);
-	}
-</script>
+
 

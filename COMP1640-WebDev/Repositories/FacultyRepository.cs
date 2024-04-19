@@ -40,18 +40,18 @@ namespace COMP1640_WebDev.Repositories
         public async Task<Faculty?> GetFaculty(string idFaculty)
         {
             var facultyInDB = _dbContext.Faculties
-                .Include(i => i.AcademicYears)
-                .Include(u => u.Users)
-                .SingleOrDefault(i => i.Id == idFaculty);
+                .Include(u => u.Magazines)
+             .Include(u => u.Users)
+             .SingleOrDefault(i => i.Id == idFaculty);
 
             if (facultyInDB == null)
             {
                 return null;
             }
-            
+
             return facultyInDB;
         }
-        
+
         //4. Function to delete faculty by id 
         public async Task<Faculty> RemoveFaculty(string idFaculty)
         {
@@ -79,7 +79,7 @@ namespace COMP1640_WebDev.Repositories
                 return null;
             }
 
-            facultyInDb.FacultyName = faculty.Id;
+            facultyInDb.Id = faculty.Id;
             facultyInDb.FacultyName = faculty.FacultyName;
             await _dbContext.SaveChangesAsync();
 

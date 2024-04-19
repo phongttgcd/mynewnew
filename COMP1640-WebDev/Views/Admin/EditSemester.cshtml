@@ -1,5 +1,5 @@
-﻿@using COMP1640_WebDev.ViewModels
-@model AcademicYearViewModel
+﻿@model AcademicYear
+
 
 @{
     Layout = "./Layout/_AdminLayout";
@@ -7,37 +7,30 @@
 
 
 <div class="px-4 mt-4 min-vh-100">
-    <h1>Create Faculty</h1>
+@*     Tan Phong - Sua lai H1 thanh Edit Semester
+ *@    <h1>Create Faculty</h1>
 
     <form asp-action="EditSemester" method="post">
         @Html.AntiForgeryToken()
-        <input asp-for="@Model.AcademicYear.Id" type="hidden" value="@Model.AcademicYear.Id" />
+        <input asp-for="Id" class="form-control" type="hidden" />
 
 
         <div class="form-group mb-2">
-            <label asp-for="AcademicYear.StartDate" class="control-label">Start Date</label>
-            <input asp-for="AcademicYear.StartDate" class="form-control" type="date" />
-            <span asp-validation-for="AcademicYear.StartDate" class="text-danger"></span>
+            <label asp-for="StartDate" class="control-label">Start Date</label>
+            <input asp-for="StartDate" class="form-control" type="date" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
         </div>
 
         <div class="form-group mb-2">
-            <label asp-for="AcademicYear.ClosureDate" class="control-label">Closure Date</label>
-            <input asp-for="AcademicYear.ClosureDate" class="form-control" type="date" />
-            <span asp-validation-for="AcademicYear.ClosureDate" class="text-danger"></span>
+            <label asp-for="ClosureDate" class="control-label">Closure Date</label>
+            <input asp-for="ClosureDate" class="form-control" type="date" />
+            <span asp-validation-for="ClosureDate" class="text-danger"></span>
         </div>
 
         <div class="form-group mb-2">
-            <label asp-for="AcademicYear.FinalDate" class="control-label">Final Date</label>
-            <input asp-for="AcademicYear.FinalDate" class="form-control" type="date" />
-            <span asp-validation-for="AcademicYear.FinalDate" class="text-danger"></span>
-        </div>
-
-        <div class="form-group mb-2">
-            <label>Category</label>
-            <select asp-for="AcademicYear.FacultyId"
-                    asp-items="@(new SelectList(Model.Falculties, "Id", "FacultyName"))"
-                    class="form-control">
-            </select>
+            <label asp-for="FinalDate" class="control-label">Final Date</label>
+            <input asp-for="FinalDate" class="form-control" type="date" />
+            <span asp-validation-for="FinalDate" class="text-danger"></span>
         </div>
 
         <div class="form-group">

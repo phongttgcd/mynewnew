@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Magazine>
+
+@{
     Layout = "./Layout/_MMLayout";
 }
 
@@ -73,15 +75,26 @@
             <table class="table table-3d table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Image</th>
                         <th>Title</th>
+                        <th>Faculty</th>
                         <th>Semeter</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                   
+                    @foreach (var magazine in Model)
+                    {
+                        <tr>
+                            <th scope="row" hidden>@magazine.Id</th>
+                            <td>@magazine.Title</td>
+                            <td>@magazine.FacultyId</td>
+                            <td>@magazine.AcademicYearId</td>
+                            <td class="d-flex justify-content-center">
+                                <a class="btn btn-primary me-3" asp-controller="" asp-action="" asp-route-id=><i class="bi bi-pencil-square me-2"></i>Edit</a>
+                                <button class="btn btn-danger delete-faculty" data-faculty-id="" data-bs-toggle="modal" data-bs-target="#actionModal"><i class="bi bi-trash me-2"></i>Delete</button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>

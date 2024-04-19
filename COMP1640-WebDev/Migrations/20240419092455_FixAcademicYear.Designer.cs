@@ -4,6 +4,7 @@ using COMP1640_WebDev.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace COMP1640_WebDev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240419092455_FixAcademicYear")]
+    partial class FixAcademicYear
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,12 +101,17 @@ namespace COMP1640_WebDev.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("FacultyId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("FacultyName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FacultyId");
 
                     b.ToTable("Faculties");
 
@@ -166,7 +174,6 @@ namespace COMP1640_WebDev.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AcademicYearId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<byte[]>("CoverImage")
@@ -178,7 +185,6 @@ namespace COMP1640_WebDev.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FacultyId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
@@ -515,19 +521,22 @@ namespace COMP1640_WebDev.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("COMP1640_WebDev.Models.Faculty", b =>
+                {
+                    b.HasOne("COMP1640_WebDev.Models.Faculty", null)
+                        .WithMany("Faculties")
+                        .HasForeignKey("FacultyId");
+                });
+
             modelBuilder.Entity("COMP1640_WebDev.Models.Magazine", b =>
                 {
                     b.HasOne("COMP1640_WebDev.Models.AcademicYear", "AcademicYear")
                         .WithMany("Magazines")
-                        .HasForeignKey("AcademicYearId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AcademicYearId");
 
                     b.HasOne("COMP1640_WebDev.Models.Faculty", "Faculty")
-                        .WithMany("Magazines")
-                        .HasForeignKey("FacultyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("FacultyId");
 
                     b.Navigation("AcademicYear");
 
@@ -620,7 +629,7 @@ namespace COMP1640_WebDev.Migrations
 
             modelBuilder.Entity("COMP1640_WebDev.Models.Faculty", b =>
                 {
-                    b.Navigation("Magazines");
+                    b.Navigation("Faculties");
 
                     b.Navigation("Users");
                 });

@@ -15,33 +15,28 @@ namespace COMP1640_WebDev.Controllers
     //[Authorize(Roles = "Marketing Manager")]
     public class MarketingManagerController : Controller
     {
-        private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMagazineRepository _magazineRepository;
 		private readonly IAcademicYearRepository _academicYearRepository;
 		private readonly IFacultyRepository _facultyRepository;
-        private readonly IUserRepository _userRepository;
-		public List<AcademicYear> AcademicYears { get; set; }
-		private readonly UserManager<User> _userManager;
-		public MarketingManagerController(IWebHostEnvironment hostEnvironment, IMagazineRepository magazineRepository, IAcademicYearRepository academicYearRepository, UserManager<User> userManager, IUserRepository userRepository, IFacultyRepository facultyRepository)
+        private readonly IWebHostEnvironment _hostEnvironment;
+
+        public MarketingManagerController(IWebHostEnvironment hostEnvironment, IMagazineRepository magazineRepository, IAcademicYearRepository academicYearRepository, IFacultyRepository facultyRepository)
         {
-            _hostEnvironment = hostEnvironment;
             _magazineRepository = magazineRepository;
 			_academicYearRepository = academicYearRepository;
             _facultyRepository = facultyRepository;
-            _userRepository = userRepository;
-            _userManager = userManager;
-		}
+            _hostEnvironment = hostEnvironment;
+        }
 
 
-		public IActionResult Index()
+        public IActionResult Index()
         {
+
             return View();
         }
 
-        // 1. Magazines management
 
-        // 6 - View Book Details
-        [HttpGet]
+       /* [HttpGet]
         public async Task<IActionResult> DetailsMagazine(string id) 
         {
             var result = await _magazineRepository.GetMagazine(id);
@@ -51,56 +46,36 @@ namespace COMP1640_WebDev.Controllers
             ViewBag.Image = image;
 
             return View(result);
-        }
+        }*/
 
-        public IActionResult MagazinesManagement()
+        public async Task<IActionResult> MagazinesManagementAsync()
         {
-            return View();
+            var magazines = await _magazineRepository.GetMagazines();
+            return View(magazines);
         }
 
 
 		[HttpGet]
-		public async Task<IActionResult> CreateMagazine()
+		public IActionResult CreateMagazine()
 		{
-			var userId = _userManager.GetUserId(User);
-			var user = await _userRepository.GetUser(userId);
-			var faculty = await _facultyRepository.GetFaculty(user.FacultyId);
-
-			var sortedAcademicYears = faculty.AcademicYears.OrderByDescending(ay => ay.StartDate).ToList();
-			ViewBag.AcademicYearId = sortedAcademicYears[0].Id;
-
-
-			return View();
+			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
+			return View(magazineViewModel);
 		}
 
 
 
 		[HttpPost]
-		public async Task<IActionResult> CreateMagazine(MagazineViewModel magazine, List<IFormFile> files)
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> CreateMagazine(MagazineViewModel mViewModel)
         {
-            var userId = _userManager.GetUserId(User);
+			if (ModelState.IsValid)
+			{
+				await _magazineRepository.CreateMagazine(mViewModel);
+				TempData["AlertMessage"] = "Magazine created successfully!!!";
+				return RedirectToAction("MagazinesManagement");
+			}
 
-            Magazine newMagazine = new();
-            var user = await _userRepository.GetUser(userId);
-
-            using (var memoryStream = new MemoryStream())
-            {
-                await files[0].CopyToAsync(memoryStream);
-                newMagazine.FacultyId = user.FacultyId;
-                newMagazine.AcademicYearId = magazine.AcademicYearId;
-                newMagazine.Title = magazine.Title;
-                newMagazine.Description = magazine.Description;
-                newMagazine.CoverImage = memoryStream.ToArray();
-            };
-
-
-            await _magazineRepository.CreateMagazine(newMagazine);
-
-            TempData["AlertMessage"] = "Created successfully!!!";
-
-
-            return RedirectToAction("MagazinesManagement");
-
+			return View();
 		}
 
 
@@ -118,20 +93,16 @@ namespace COMP1640_WebDev.Controllers
 
         public IActionResult DownloadZip1()
         {
-            // Define the path to the uploads directory
             var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
 
-            // Temporary filename for the ZIP archive
             var tempZipFileName = "MarketingFiles.zip";
             var tempZipPath = Path.Combine(Path.GetTempPath(), tempZipFileName);
 
-            // Ensure any existing instance of the file is deleted
             if (System.IO.File.Exists(tempZipPath))
             {
                 System.IO.File.Delete(tempZipPath);
             }
 
-            // Create a new ZIP archive
             using (var zipStream = new FileStream(tempZipPath, FileMode.CreateNew))
             using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
             {
@@ -148,7 +119,6 @@ namespace COMP1640_WebDev.Controllers
                 }
             }
 
-            // Send the ZIP file to the browser
             return PhysicalFile(tempZipPath, "application/zip", tempZipFileName);
         }
 
@@ -158,21 +128,17 @@ namespace COMP1640_WebDev.Controllers
         {
             if (string.IsNullOrEmpty(file))
             {
-                // Handle invalid file name
                 return BadRequest("Invalid file name.");
             }
 
-            // Define the path to the uploads directory
             var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
 
             var filePath = Path.Combine(uploadsPath, file);
             if (!System.IO.File.Exists(filePath))
             {
-                // Handle case where file doesn't exist
                 return NotFound();
             }
 
-            // Return the file
             return PhysicalFile(filePath, "application/octet-stream", file);
         }
     }

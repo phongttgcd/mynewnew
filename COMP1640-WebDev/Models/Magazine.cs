@@ -7,25 +7,24 @@ namespace COMP1640_WebDev.Models
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        [Required(ErrorMessage ="Title of magazine can not be null")]
+        [Required(ErrorMessage ="Title of Magazine can not be null")]
         [StringLength(255)]
         public string? Title {  get; set; } 
         public string? Description { get; set; }
-        public byte[] CoverImage { get; set; }
+        public byte[]? CoverImage { get; set; }
 
 
-        //[Required]
-        [Display(Name = "Faculty")]
+        [Required (ErrorMessage ="Please select Faculty")]
+		[Display(Name = "Faculty")]
         [ForeignKey("Faculty")]
-        public string? FacultyId { get; set; } 
+        public required string FacultyId { get; set; } 
         public Faculty? Faculty { get; set; }
 
-
+		[Required(ErrorMessage = "Please select Semester")]
 		[Display(Name = "AcademicYear")]
 		[ForeignKey("AcademicYear")]
-		public string? AcademicYearId { get; set; }
+		public required string AcademicYearId { get; set; }
 		public AcademicYear? AcademicYear { get; set; }
-
 
 	}
 }

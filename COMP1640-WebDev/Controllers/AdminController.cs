@@ -193,17 +193,17 @@ namespace COMP1640_WebDev.Controllers
         [HttpGet]
         public IActionResult CreateSemester()
         {
-            var semesterViewModel = _academicYearRepository.GetAcademicYearViewModel();
-            return View(semesterViewModel);
+            
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateSemester(AcademicYearViewModel semesterViewModel)
+        public async Task<IActionResult> CreateSemester(AcademicYear newAcademicYear)
         {
             if(ModelState.IsValid)
             {
-                await _academicYearRepository.CreateAcademicYear(semesterViewModel) ;
+                await _academicYearRepository.CreateAcademicYear(newAcademicYear) ;
                 TempData["AlertMessage"] = "Semester created successfully!!!";
                 return RedirectToAction("SemestersManagement");
             }
@@ -229,28 +229,33 @@ namespace COMP1640_WebDev.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditSemester(string id)
+        public async Task<IActionResult> EditSemesterAsync(string id)
         {
-            var academicYear = _academicYearRepository.GetAcademicYearViewModelByID(id);
-            if (academicYear == null)
-            {
-                return NotFound();
-            }
+			if (id == null)
+			{
+				return NotFound();
+			}
 
-            return View(academicYear);
+			var academicYear = await _academicYearRepository.GetAcademicYear(id);
+			if (academicYear == null)
+			{
+				return NotFound();
+			}
+
+			return View(academicYear);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditSemester(AcademicYearViewModel viewModel)
+        public async Task<IActionResult> EditSemester(string id, AcademicYear updatedAcademicYear)
         {
             if (ModelState.IsValid)
             {
-                await _academicYearRepository.UpdateAcademicYear(viewModel);
+                await _academicYearRepository.UpdateAcademicYear(id,updatedAcademicYear);
                 TempData["AlertMessage"] = "Semester updated successfully!!!";
                 return RedirectToAction("SemestersManagement");
             }
-            return View(viewModel);
+            return View(updatedAcademicYear);
         }
 
 
