@@ -37,6 +37,7 @@ namespace COMP1640_WebDev.Repositories
                 Description = magazine.Description,
                 FacultyId = magazine.FacultyId,
                 CoverImage = magazine.CoverImage,
+                AcademicYearId= magazine.AcademicYearId,
 
             };
             var result = await _dbContext.Magazines.AddAsync(magazineToCreate);

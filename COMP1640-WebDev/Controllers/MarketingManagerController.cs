@@ -58,18 +58,22 @@ namespace COMP1640_WebDev.Controllers
             return View();
         }
 
+
 		[HttpGet]
 		public async Task<IActionResult> CreateMagazine()
-        {
+		{
 			var userId = _userManager.GetUserId(User);
 			var user = await _userRepository.GetUser(userId);
 			var faculty = await _facultyRepository.GetFaculty(user.FacultyId);
 
 			var sortedAcademicYears = faculty.AcademicYears.OrderByDescending(ay => ay.StartDate).ToList();
-
 			ViewBag.AcademicYearId = sortedAcademicYears[0].Id;
+
+
 			return View();
-        }
+		}
+
+
 
 		[HttpPost]
 		public async Task<IActionResult> CreateMagazine(MagazineViewModel magazine, List<IFormFile> files)
