@@ -9,21 +9,15 @@ using System.Diagnostics;
 
 namespace COMP1640_WebDev.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(IWebHostEnvironment hostEnvironment) : Controller
     {
-        private readonly IWebHostEnvironment _hostEnvironment;
-        public HomeController(IWebHostEnvironment hostEnvironment)
-        {
-            _hostEnvironment = hostEnvironment;
-        }
-        public IActionResult Index()
+        private readonly IWebHostEnvironment _hostEnvironment = hostEnvironment;
+
+		public IActionResult Index()
         {
             return View();
         }
 
-      
-
-      
         public IActionResult Privacy()
         {
             return View();

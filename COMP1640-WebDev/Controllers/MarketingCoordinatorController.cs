@@ -11,24 +11,11 @@ using System;
 
 namespace COMP1640_WebDev.Controllers
 {
-    public class MarketingCoordinatorController : Controller
+    public class MarketingCoordinatorController( IContributionRepository contributionRepository) : Controller
     {
-        private readonly IFacultyRepository _facultyRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IAcademicYearRepository _academicYearRepository;
-        private readonly IContributionRepository _contributionRepository;
-        public MarketingCoordinatorController(IFacultyRepository facultyRepository, IUserRepository userRepository, IAcademicYearRepository academicYearRepository, IContributionRepository contributionRepository)
-        {
-            _facultyRepository = facultyRepository;
-            _userRepository = userRepository;
-            _academicYearRepository = academicYearRepository;
-            _contributionRepository = contributionRepository;
-        }
+        private readonly IContributionRepository _contributionRepository = contributionRepository;
 
-
-
-
-        [HttpGet]
+		[HttpGet]
         public IActionResult Index()
         {
             return View();
@@ -42,13 +29,9 @@ namespace COMP1640_WebDev.Controllers
         [HttpGet]
         public async Task<IActionResult> VerifyComment()
         {
-
             var comments = await _contributionRepository.GetContributionsInprogess();
 
-
             return View("VerifyComment", comments);
-
-
         }
 
         [HttpGet]
@@ -72,16 +55,13 @@ namespace COMP1640_WebDev.Controllers
         {
             var Comment = await _contributionRepository.GetContribution(id);
 
-
             if (Comment == null)
             {
                 return BadRequest();
             }
 
             Comment.Status = Enum.BrowserComment.Rejected;
-           await _contributionRepository.UpdateContribution(id,Comment);
-
-
+            await _contributionRepository.UpdateContribution(id,Comment);
             return RedirectToAction("VerifyComment");
         }
 

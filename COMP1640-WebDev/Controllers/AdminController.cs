@@ -10,29 +10,19 @@ using System;
 namespace COMP1640_WebDev.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class AdminController : Controller
+    public class AdminController(IFacultyRepository facultyRepository, IUserRepository userRepository, IAcademicYearRepository academicYearRepository, IContributionRepository contributionRepository) : Controller
     {
-        private readonly IFacultyRepository _facultyRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IAcademicYearRepository _academicYearRepository;
-        private readonly IContributionRepository _contributionRepository;
-        public AdminController(IFacultyRepository facultyRepository, IUserRepository userRepository, IAcademicYearRepository academicYearRepository, IContributionRepository contributionRepository)
-        {
-            _facultyRepository = facultyRepository;
-            _userRepository = userRepository;
-            _academicYearRepository = academicYearRepository;
-            _contributionRepository = contributionRepository;
-        }
+        private readonly IFacultyRepository _facultyRepository = facultyRepository;
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IAcademicYearRepository _academicYearRepository = academicYearRepository;
+        private readonly IContributionRepository _contributionRepository = contributionRepository;
 
-        //1. Index Methods
-        public async Task<IActionResult> IndexAsync()
+		public async Task<IActionResult> IndexAsync()
         {
-            // Retrieve dynamic data from the database or any other source
-            var facultiesData = new int[] { 30, 20, 10 }; // Sample data, replace with actual data
+            var facultiesData = new int[] { 30, 20, 10 };
             int[] usersData = await _userRepository.GetUserCounts();
-            var semestersData = new int[] { 20, 15, 25 }; // Sample data, replace with actual data
+            var semestersData = new int[] { 20, 15, 25 };
 
-            // Pass the data to the view
             ViewBag.FacultiesData = facultiesData;
             ViewBag.UsersData = usersData;
             ViewBag.SemestersData = semestersData;
@@ -40,8 +30,6 @@ namespace COMP1640_WebDev.Controllers
             return View();
         }
 
-   
-        //2. Account Management Methods
         [HttpGet]
         public IActionResult AccountsManagement()
         {
@@ -104,10 +92,6 @@ namespace COMP1640_WebDev.Controllers
             return RedirectToAction("AccountsManagement");
         }
 
-
-
-
-        //3. Faculty Management Methods
         [HttpGet]
         public async Task<IActionResult> FacultiesManagement()
         {
@@ -182,7 +166,6 @@ namespace COMP1640_WebDev.Controllers
             return RedirectToAction("FacultiesManagement");
         }
 
-        //3. Semesters Management Methods
         [HttpGet]
         public async Task<IActionResult> SemestersManagement()
         {
@@ -257,9 +240,5 @@ namespace COMP1640_WebDev.Controllers
             }
             return View(updatedAcademicYear);
         }
-
-
-
-
 	}
 }
