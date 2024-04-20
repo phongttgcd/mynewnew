@@ -10,8 +10,8 @@ namespace COMP1640_WebDev.Repositories.Interfaces
 		MagazineViewModel GetMagazineViewModelByID(string idMagazine);
 		Task<IEnumerable<Magazine>> GetMagazines();
         Task<Magazine> GetMagazineByID(string id);
-        Task<Magazine> CreateMagazine(MagazineViewModel magazineViewModel);
-        Task<Magazine> UpdateMagazine(MagazineViewModel magazineViewModel);
+        Task<Magazine> CreateMagazine(Magazine magazine, IFormFile? formFile);
+        Task<Magazine> UpdateMagazine(Magazine magazine, IFormFile? formFile);
         Task<Magazine> RemoveMagazine(string id);
 
 

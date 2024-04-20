@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 using System.IO.Compression;
 
 namespace COMP1640_WebDev.Controllers
@@ -70,17 +71,64 @@ namespace COMP1640_WebDev.Controllers
         {
 			if (ModelState.IsValid)
 			{
-				await _magazineRepository.CreateMagazine(mViewModel);
+                var newMagazine = new Magazine
+                {
+                    Title = mViewModel.Title,
+                    Description = mViewModel.Description,
+                    FacultyId = mViewModel.FacultyId,
+                    AcademicYearId = mViewModel.AcademicYearId
+
+                };
+                await _magazineRepository.CreateMagazine(newMagazine, mViewModel.FormFile);
+				TempData["AlertMessage"] = "Magazine created successfully!!!";
+				return RedirectToAction("MagazinesManagement");
+			}
+		
+			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
+			return View(magazineViewModel);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> EditMagazine(string id)
+		{
+			var result = await _magazineRepository.GetMagazineByID(id);
+			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
+            magazineViewModel.Title = result.Title;
+            magazineViewModel.Description = result.Description;
+            magazineViewModel.AcademicYearId = result.AcademicYearId;
+            magazineViewModel.FacultyId = result.FacultyId;
+
+			return View(magazineViewModel);
+		}
+
+
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> EditMagazine(MagazineViewModel mViewModel)
+		{
+			if (ModelState.IsValid)
+			{
+				var newMagazine = new Magazine
+				{
+					Title = mViewModel.Title,
+					Description = mViewModel.Description,
+					FacultyId = mViewModel.FacultyId,
+					AcademicYearId = mViewModel.AcademicYearId
+
+				};
+				await _magazineRepository.UpdateMagazine(newMagazine, mViewModel.FormFile);
 				TempData["AlertMessage"] = "Magazine created successfully!!!";
 				return RedirectToAction("MagazinesManagement");
 			}
 
-            return View(mViewModel);
-        }
+			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
+			return View(magazineViewModel);
+		}
 
 
-        // 2.Download file
-        public IActionResult DataManagement()
+		// 2.Download file
+		public IActionResult DataManagement()
         {
             var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
             var fileModels = Directory.GetFiles(uploadsPath)

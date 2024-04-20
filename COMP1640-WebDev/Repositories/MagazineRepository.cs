@@ -2,6 +2,7 @@
 using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
 using COMP1640_WebDev.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
 
@@ -54,34 +55,37 @@ namespace COMP1640_WebDev.Repositories
 		}
 
 
-        public async Task<Magazine> CreateMagazine(MagazineViewModel magazineViewModel)
+        public async Task<Magazine> CreateMagazine(Magazine magazine, IFormFile? formFile)
         {
             using (var memoryStream = new MemoryStream())
             {
-                await magazineViewModel.FormFile!.CopyToAsync(memoryStream);
+                await formFile!.CopyToAsync(memoryStream);
 
-                var newMagazine = new Magazine
-                {
-                    CoverImage = memoryStream.ToArray(),
-                    Title = magazineViewModel.Magazine.Title,
-                    Description = magazineViewModel.Magazine.Description,
-                    FacultyId = magazineViewModel.Magazine.FacultyId,
-                    AcademicYearId = magazineViewModel.Magazine.AcademicYearId
+                magazine.CoverImage = memoryStream.ToArray(); 
+           
 
-                };
-
-                var result = await _dbContext.Magazines!.AddAsync(newMagazine);
+                var result = await _dbContext.Magazines!.AddAsync(magazine);
                 await _dbContext.SaveChangesAsync();
                 return result.Entity;
             }
         }
 
-        public Task<Magazine> UpdateMagazine(MagazineViewModel magazineViewModel)
-		{
-			throw new NotImplementedException();
-		}
+        public async Task<Magazine> UpdateMagazine(Magazine magazine, IFormFile? formFile)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await formFile!.CopyToAsync(memoryStream);
 
-        public async Task<Magazine?> GetMagazineByID(string id)
+                magazine.CoverImage = memoryStream.ToArray();
+
+
+                var result =  _dbContext.Magazines!.Update(magazine);
+                await _dbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+        }
+
+			public async Task<Magazine?> GetMagazineByID(string id)
         {
             var magazineInDB = _dbContext.Magazines
                .Include(u => u.Faculty)
