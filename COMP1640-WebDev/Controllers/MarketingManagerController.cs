@@ -12,7 +12,7 @@ using System.IO.Compression;
 namespace COMP1640_WebDev.Controllers
 {
 
-    //[Authorize(Roles = "Marketing Manager")]
+    [Authorize(Roles = "Marketing Manager")]
     public class MarketingManagerController : Controller
     {
         private readonly IMagazineRepository _magazineRepository;
@@ -36,17 +36,17 @@ namespace COMP1640_WebDev.Controllers
         }
 
 
-       /* [HttpGet]
-        public async Task<IActionResult> DetailsMagazine(string id) 
+        [HttpGet]
+        public async Task<IActionResult> DetailsMagazine(string id)
         {
-            var result = await _magazineRepository.GetMagazine(id);
+            var magazineInDb = await _magazineRepository.GetMagazineByID(id);
 
-            string imageBase64Data = Convert.ToBase64String(result.CoverImage);
+            string imageBase64Data = Convert.ToBase64String(magazineInDb.CoverImage);
             string image = string.Format("data:image/jpg;base64, {0}", imageBase64Data);
             ViewBag.Image = image;
 
-            return View(result);
-        }*/
+            return View(magazineInDb);
+        }
 
         public async Task<IActionResult> MagazinesManagementAsync()
         {
@@ -57,7 +57,7 @@ namespace COMP1640_WebDev.Controllers
 
 		[HttpGet]
 		public IActionResult CreateMagazine()
-		{
+		{       
 			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
 			return View(magazineViewModel);
 		}
@@ -75,12 +75,12 @@ namespace COMP1640_WebDev.Controllers
 				return RedirectToAction("MagazinesManagement");
 			}
 
-			return View();
-		}
+            return View(mViewModel);
+        }
 
 
-		// 2.Download file
-		public IActionResult DataManagement()
+        // 2.Download file
+        public IActionResult DataManagement()
         {
             var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
             var fileModels = Directory.GetFiles(uploadsPath)

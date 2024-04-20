@@ -3,6 +3,7 @@ using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
 using COMP1640_WebDev.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
 
 
 namespace COMP1640_WebDev.Repositories
@@ -41,8 +42,8 @@ namespace COMP1640_WebDev.Repositories
 		{
             var viewModel = new MagazineViewModel()
             {
-                Falulties = _dbContext.Faculties!.ToList(),
-                AcademicYears = _dbContext.AcademicYears!.ToList(),
+                Falulties = _dbContext.Faculties.ToList(),
+                AcademicYears = _dbContext.AcademicYears.ToList(),
             };
             return viewModel;
 		}
@@ -52,11 +53,12 @@ namespace COMP1640_WebDev.Repositories
 			throw new NotImplementedException();
 		}
 
-		public async Task<Magazine> CreateMagazine(MagazineViewModel magazineViewModel)
-		{
-			using (var memoryStream = new MemoryStream())
-			{
-				await magazineViewModel.FormFile!.CopyToAsync(memoryStream);
+
+        public async Task<Magazine> CreateMagazine(MagazineViewModel magazineViewModel)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await magazineViewModel.FormFile!.CopyToAsync(memoryStream);
 
                 var newMagazine = new Magazine
                 {
@@ -65,23 +67,33 @@ namespace COMP1640_WebDev.Repositories
                     Description = magazineViewModel.Magazine.Description,
                     FacultyId = magazineViewModel.Magazine.FacultyId,
                     AcademicYearId = magazineViewModel.Magazine.AcademicYearId
-                    
+
                 };
-			
-				var result = await _dbContext.Magazines!.AddAsync(newMagazine);
-				await _dbContext.SaveChangesAsync();
+
+                var result = await _dbContext.Magazines!.AddAsync(newMagazine);
+                await _dbContext.SaveChangesAsync();
                 return result.Entity;
-			}
-		}
+            }
+        }
 
-		public Task<Magazine> UpdateMagazine(MagazineViewModel magazineViewModel)
+        public Task<Magazine> UpdateMagazine(MagazineViewModel magazineViewModel)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<Magazine> GetMagazine(string id)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public async Task<Magazine?> GetMagazineByID(string id)
+        {
+            var magazineInDB = _dbContext.Magazines
+               .Include(u => u.Faculty)
+            .Include(u => u.AcademicYear)
+            .SingleOrDefault(i => i.Id == id);
+
+            if (magazineInDB == null)
+            {
+                return null;
+            }
+
+            return magazineInDB;
+        }
+    }
 }

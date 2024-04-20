@@ -15,14 +15,15 @@ namespace COMP1640_WebDev.Controllers
 
 	public class StudentController : Controller
 	{
-		private readonly IWebHostEnvironment _hostEnvironment;
 		private readonly IContributionRepository _contributionRepository;
-		private readonly IUserRepository _userRepository;
 		private readonly IAcademicYearRepository _academicYearRepository;
-        private readonly UserManager<User> _userManager;
 		private readonly IFacultyRepository _facultyRepository;
+		private readonly IMagazineRepository _magazineRepository;
+		private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly UserManager<User> _userManager;
+		private readonly IUserRepository _userRepository;
 
-		public StudentController(IWebHostEnvironment hostEnvironment, IAcademicYearRepository academicYearRepository, UserManager<User> userManager,  IContributionRepository contributionRepository, IUserRepository userRepository, IFacultyRepository facultyRepository)
+		public StudentController(IMagazineRepository magazineRepository,IWebHostEnvironment hostEnvironment, IAcademicYearRepository academicYearRepository, UserManager<User> userManager,  IContributionRepository contributionRepository, IUserRepository userRepository, IFacultyRepository facultyRepository)
 		{
 			_hostEnvironment = hostEnvironment;
 			_contributionRepository = contributionRepository;
@@ -30,12 +31,14 @@ namespace COMP1640_WebDev.Controllers
 			_userRepository = userRepository;
             _facultyRepository = facultyRepository;
             _userManager = userManager;
+			_magazineRepository = magazineRepository;
 		}
 
 		[HttpGet]
-		public IActionResult Index()
+		public async Task<IActionResult> IndexAsync()
 		{
-			return View();
+            var magazines = await _magazineRepository.GetMagazines();
+            return View();
 		}
 
         /*[HttpGet]

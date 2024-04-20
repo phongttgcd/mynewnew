@@ -11,6 +11,7 @@ namespace COMP1640_WebDev.Models
         [StringLength(255)]
         public string? Title {  get; set; } 
         public string? Description { get; set; }
+        [Required(ErrorMessage = "Please select cover image for magazine")]
         public byte[]? CoverImage { get; set; }
 
 
