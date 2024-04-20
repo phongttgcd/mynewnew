@@ -93,6 +93,7 @@ namespace COMP1640_WebDev.Controllers
 		{
 			var result = await _magazineRepository.GetMagazineByID(id);
 			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
+            magazineViewModel.Id = result.Id;
             magazineViewModel.Title = result.Title;
             magazineViewModel.Description = result.Description;
             magazineViewModel.AcademicYearId = result.AcademicYearId;
@@ -111,6 +112,7 @@ namespace COMP1640_WebDev.Controllers
 			{
 				var newMagazine = new Magazine
 				{
+                    Id = mViewModel.Id,
 					Title = mViewModel.Title,
 					Description = mViewModel.Description,
 					FacultyId = mViewModel.FacultyId,

@@ -7,9 +7,11 @@
 
 
 <div class="px-4 mt-4 min-vh-100">
-	<h1>Create Magazine</h1>
+	<h1>Update Magazine</h1>
 
-	<form asp-action="CreateMagazine" method="post" enctype="multipart/form-data">
+	<form asp-action="EditMagazine" method="post" enctype="multipart/form-data">
+		<input asp-for="@Model.Id" type="hidden" value="@Model.Id" />
+
 		@Html.AntiForgeryToken()
 		<div class="form-group mb-2">
 			<label asp-for="@Model.FormFile">Choose files to upload:</label>
@@ -22,7 +24,6 @@
 			<span asp-validation-for="@Model.Title" class="text-danger"></span>
 		</div>
 
-		@* 	Tan Phong Sua label ben duoi thanh Description *@
 		<div class="form-group mb-2">
 			<label asp-for="@Model.Description" class="control-label">Title</label>
 			<input asp-for="@Model.Description" class="form-control" />
@@ -51,7 +52,7 @@
 
 
 		<div class="form-group">
-			<input type="submit" value="Create" class="btn btn-primary" />
+			<input type="submit" value="Update" class="btn btn-primary" />
 		</div>
 	</form>
 </div>

@@ -5,6 +5,9 @@ namespace COMP1640_WebDev.ViewModels
 {
 	public class MagazineViewModel
 	{
+		public string? Id { get; set; }
+
+
 		[Required(ErrorMessage = "Title can not be null")]
 		public string Title { get; set; }
 		[Required(ErrorMessage = "Description can not be null")]
