@@ -12,27 +12,13 @@ namespace COMP1640_WebDev.Controllers
 {
 
 	[Authorize(Roles = "Student")]
-
-	public class StudentController : Controller
+	public class StudentController(IMagazineRepository magazineRepository, IAcademicYearRepository academicYearRepository, UserManager<User> userManager, IContributionRepository contributionRepository, IUserRepository userRepository) : Controller
 	{
-		private readonly IContributionRepository _contributionRepository;
-		private readonly IAcademicYearRepository _academicYearRepository;
-		private readonly IFacultyRepository _facultyRepository;
-		private readonly IMagazineRepository _magazineRepository;
-		private readonly IWebHostEnvironment _hostEnvironment;
-        private readonly UserManager<User> _userManager;
-		private readonly IUserRepository _userRepository;
-
-		public StudentController(IMagazineRepository magazineRepository,IWebHostEnvironment hostEnvironment, IAcademicYearRepository academicYearRepository, UserManager<User> userManager,  IContributionRepository contributionRepository, IUserRepository userRepository, IFacultyRepository facultyRepository)
-		{
-			_hostEnvironment = hostEnvironment;
-			_contributionRepository = contributionRepository;
-			_academicYearRepository = academicYearRepository;
-			_userRepository = userRepository;
-            _facultyRepository = facultyRepository;
-            _userManager = userManager;
-			_magazineRepository = magazineRepository;
-		}
+		private readonly IContributionRepository _contributionRepository = contributionRepository;
+		private readonly IAcademicYearRepository _academicYearRepository = academicYearRepository;
+		private readonly IMagazineRepository _magazineRepository = magazineRepository;
+        private readonly UserManager<User> _userManager = userManager;
+		private readonly IUserRepository _userRepository = userRepository;
 
 		[HttpGet]
 		public async Task<IActionResult> IndexAsync()
@@ -41,13 +27,6 @@ namespace COMP1640_WebDev.Controllers
             return View();
 		}
 
-        /*[HttpGet]
-        public async Task<IActionResult> AddCommentAsync()
-        {
-
-        }*/
-
-        // Method to handle the submission of a new comment
         [HttpPost]
         public async Task<IActionResult> AddComment(CreateContribute data, List<IFormFile> files)
 		{
@@ -56,7 +35,6 @@ namespace COMP1640_WebDev.Controllers
 			Contribution contri = new();
 			var user = await _userRepository.GetUser(userId);
 			var academicYear = await _academicYearRepository.GetAcademicYear(data.AcademicYearId);
-
            
 			using (var memoryStream = new MemoryStream())
 			{
@@ -77,6 +55,7 @@ namespace COMP1640_WebDev.Controllers
 
 			return View();
         }
+
 		[HttpGet]
 		public async Task<IActionResult> EditComment(string id)
 		{
@@ -106,8 +85,5 @@ namespace COMP1640_WebDev.Controllers
 			}
 			return View(updateContribution);
 		}
-
 	}
-
-
 }
