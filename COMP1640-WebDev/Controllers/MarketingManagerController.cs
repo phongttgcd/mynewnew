@@ -59,7 +59,7 @@ namespace COMP1640_WebDev.Controllers
 		public IActionResult CreateMagazine()
 		{       
 			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
-			return View(magazineViewModel);
+            return View(magazineViewModel);
 		}
 
 
