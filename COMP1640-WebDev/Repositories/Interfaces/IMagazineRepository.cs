@@ -8,7 +8,8 @@ namespace COMP1640_WebDev.Repositories.Interfaces
     {
 		MagazineViewModel GetMagazineViewModel();
 		MagazineViewModel GetMagazineViewModelByID(string idMagazine);
-		Task<IEnumerable<Magazine>> GetMagazines();
+        IEnumerable<MagazineTableView> GetAllMagazines();
+        Task<IEnumerable<Magazine>> GetMagazines();
         Task<Magazine> GetMagazineByID(string id);
         Task<Magazine> CreateMagazine(Magazine magazine, IFormFile? formFile);
         Task<Magazine> UpdateMagazine(Magazine magazine, IFormFile? formFile);

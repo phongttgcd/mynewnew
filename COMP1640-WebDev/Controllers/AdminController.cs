@@ -19,31 +19,27 @@ namespace COMP1640_WebDev.Controllers
 
 		public async Task<IActionResult> IndexAsync()
         {
-            var facultiesData = new int[] { 30, 20, 10 };
             int[] usersData = await _userRepository.GetUserCounts();
-            var semestersData = new int[] { 20, 15, 25 };
 
-            ViewBag.FacultiesData = facultiesData;
             ViewBag.UsersData = usersData;
-            ViewBag.SemestersData = semestersData;
 
             return View();
         }
 
         [HttpGet]
-        public IActionResult AccountsManagement()
+        public IActionResult AccountsManagement(string? attribute = null, string? value = null)
         {
-            var users = _userRepository.GetAllUsers();
-            return View(users);
-        }
+            IEnumerable<UsersViewModel> users;
+            if (!string.IsNullOrEmpty(attribute) && !string.IsNullOrEmpty(value))
+            {
+                users = _userRepository.SearchUsers(attribute, value);
+            }
+            else
+            {
+                users = _userRepository.GetAllUsers();
+            }
 
-
-        [HttpGet]
-        public IActionResult Search(string attribute, string value)
-        {
-            var users = _userRepository.SearchUsers(attribute, value); 
-
-            return View("AccountsManagement", users); 
+            return View("AccountsManagement", users);
         }
 
         [HttpGet]

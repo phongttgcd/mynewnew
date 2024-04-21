@@ -3,6 +3,7 @@ using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
 using COMP1640_WebDev.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
 
@@ -22,9 +23,6 @@ namespace COMP1640_WebDev.Repositories
         {
             return await _dbContext.Magazines!.ToListAsync();
         }
-
-      
-
 
         public async Task<Magazine> RemoveMagazine(string id)
         {
@@ -98,6 +96,19 @@ namespace COMP1640_WebDev.Repositories
             }
 
             return magazineInDB;
+        }
+
+        public IEnumerable<MagazineTableView> GetAllMagazines()
+        {
+            var magazines = _dbContext.Magazines!.Select(c => new MagazineTableView()
+            {
+                Id = c.Id,
+                Title = c.Title,
+                Faculty = c.Faculty!.FacultyName,
+                AcademicYear = c.AcademicYear!.StartDate.ToString()
+            }).ToList();
+
+            return magazines;
         }
     }
 }

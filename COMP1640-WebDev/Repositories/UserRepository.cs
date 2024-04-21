@@ -20,13 +20,21 @@ namespace COMP1640_WebDev.Repositories
 
         public async Task<int[]> GetUserCounts()
         {
-            int[] userCounts = new int[2]; 
+            int[] userCounts = new int[4]; 
 
-            var studentsCount = await _userManager.GetUsersInRoleAsync("Student");
-            userCounts[0] = studentsCount.Count;
+            var adminsCount = await  _userManager.GetUsersInRoleAsync("Admin");
+            userCounts[0] = adminsCount.Count;
 
             var marketingManagersCount = await _userManager.GetUsersInRoleAsync("Marketing Manager");
             userCounts[1] = marketingManagersCount.Count;
+
+            var marketingCoordinatorsCount = await _userManager.GetUsersInRoleAsync("Marketing Coordinator");
+            userCounts[2] = marketingCoordinatorsCount.Count;
+
+            var studentsCount = await _userManager.GetUsersInRoleAsync("Student");
+            userCounts[3] = studentsCount.Count;
+
+       
 
             return userCounts;
         }

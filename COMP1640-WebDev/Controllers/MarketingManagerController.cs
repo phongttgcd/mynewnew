@@ -1,4 +1,5 @@
 ﻿using COMP1640_WebDev.Models;
+using COMP1640_WebDev.Repositories;
 using COMP1640_WebDev.Repositories.Interfaces;
 using COMP1640_WebDev.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -38,14 +39,17 @@ namespace COMP1640_WebDev.Controllers
             return View(magazineInDb);
         }
 
-        public async Task<IActionResult> MagazinesManagementAsync()
+        public IActionResult MagazinesManagementAsync()
         {
-            var magazines = await _magazineRepository.GetMagazines();
+            var magazines = _magazineRepository.GetAllMagazines();
             return View(magazines);
         }
 
 
-		[HttpGet]
+     
+
+
+        [HttpGet]
 		public IActionResult CreateMagazine()
 		{       
 			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
@@ -105,7 +109,7 @@ namespace COMP1640_WebDev.Controllers
 
 				};
 				await _magazineRepository.UpdateMagazine(newMagazine, mViewModel.FormFile);
-				TempData["AlertMessage"] = "Magazine created successfully!!!";
+				TempData["AlertMessage"] = "Magazine updated successfully!!!";
 				return RedirectToAction("MagazinesManagement");
 			}
 
@@ -113,7 +117,24 @@ namespace COMP1640_WebDev.Controllers
 			return View(magazineViewModel);
 		}
 
-		public IActionResult DataManagement()
+        [HttpGet]
+        public async Task<IActionResult> DeleteMagazine(string id)
+        {
+            var removedMagazine = await _magazineRepository.RemoveMagazine(id);
+
+            if (removedMagazine == null)
+            {
+                TempData["AlertMessage"] = "Error: Unable to delete Magazine. Magazine not found or some other error occurred.";
+            }
+            else
+            {
+                TempData["AlertMessage"] = "Success: Magazine deleted successfully!";
+            }
+
+            return RedirectToAction("MagazinesManagement");
+        }
+
+        public IActionResult DataManagement()
         {
             var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
             var fileModels = Directory.GetFiles(uploadsPath)
