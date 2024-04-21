@@ -107,6 +107,12 @@ namespace COMP1640_WebDev.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (await _facultyRepository.IsFacultyIdExists(newFaculty.Id))
+                {
+                    ModelState.AddModelError("Id", "Faculty ID already exists.");
+                    return View(newFaculty);
+                }
+
                 await _facultyRepository.CreateFaculty(newFaculty);
                 TempData["AlertMessage"] = "Faculty created successfully!!!";
                 return RedirectToAction("FacultiesManagement");
@@ -182,6 +188,12 @@ namespace COMP1640_WebDev.Controllers
         {
             if(ModelState.IsValid)
             {
+                if (await _academicYearRepository.IsAcademicYearIdExists(newAcademicYear.Id))
+                {
+                    ModelState.AddModelError("Id", "Academic Year ID already exists.");
+                    return View(newAcademicYear);
+                }
+
                 await _academicYearRepository.CreateAcademicYear(newAcademicYear) ;
                 TempData["AlertMessage"] = "Semester created successfully!!!";
                 return RedirectToAction("SemestersManagement");

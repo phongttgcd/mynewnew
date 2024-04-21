@@ -9,5 +9,6 @@ namespace COMP1640_WebDev.Repositories.Interfaces
         Task<Faculty> CreateFaculty(Faculty faculty);
         Task<Faculty> RemoveFaculty(string idFaculty);
         Task<Faculty> UpdateFaculty(string idFaculty, Faculty faculty);
+        Task<bool> IsFacultyIdExists(string facultyId);
     }
 }

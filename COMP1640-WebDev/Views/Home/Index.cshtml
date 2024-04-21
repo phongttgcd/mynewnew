@@ -1,75 +1,30 @@
-﻿@{
+﻿@using COMP1640_WebDev.ViewModels
+@model IEnumerable<MagazineTableView>
+@{
     ViewData["Title"] = "Home Page";
     Layout = "./Layout/_GuestLayout";
 }
 
 
-@{
-    var articles = new[]
-           {
-        new
-        {
-            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
-            Title = "Magazine Title",
-            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-            LastUpdated = "Last updated 3 mins ago"
-        },
-          new
-        {
-            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
-            Title = "Magazine Title",
-            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-            LastUpdated = "Last updated 3 mins ago"
-        },
-          new
-        {
-            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
-            Title = "Magazine Title",
-            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-            LastUpdated = "Last updated 3 mins ago"
-        },
-          new
-        {
-            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
-            Title = "Magazine Title",
-            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-            LastUpdated = "Last updated 3 mins ago"
-        },
-          new
-        {
-            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
-            Title = "Magazine Title",
-            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-            LastUpdated = "Last updated 3 mins ago"
-        },
-        new
-         {
-            ImageUrl = "https://images.inc.com/uploaded_files/magazinetoc/INCV1_NOUPC_535.jpg",
-            Title = "Magazine Title",
-            Description = "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-            LastUpdated = "Last updated 3 mins ago"
-        },
-    };
-}
 
 
 <style>
     .articleCard {
-        max-width: 540px;
+        height: 100%;
         transition: transform 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease, border 0.3s ease;
     }
-
         .articleCard:hover {
             transform: translateY(-15px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 6px 15px rgba(0, 0, 0, 0.1), 0 15px 25px rgba(0, 0, 0, 0.1);
         }
 
     .imageArticle {
-        height: 100%;
-        width: 100%;
+        height: 300px;
+        border: 2px solid white;
+        border-radius: 5px;
     }
 
-    .section-title {
+    .searchForm {
         margin-bottom: 15px;
         padding: 15px;
         display: flex;
@@ -84,30 +39,26 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="section-title">
-            <h4 class="m-0 text-uppercase fw-bold">Latest Magazines</h4>
-            <a class="text-secondary fw-lighter text-decoration-none" href="">View All</a>
+        <div class="input-group searchForm">
+            <input type="text" class="form-control" placeholder="Search for magazines..." aria-label="Search" aria-describedby="searchButton">
+            <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
         </div>
     </div>
-    @foreach (var article in articles)
+
+    @foreach (var magazine in Model)
     {
-        <div class="col-lg-6">
-            <a class="text-decoration-none text-dark" asp-controller="Home" asp-action="Index">
-                <div class="articleCard card mb-4">
-                    <div class="row g-0">
-                        <div class="col-md-6">
-                            <img src="@article.ImageUrl" class="imageArticle img-thumbnail rounded-start" alt="Image">
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card-body">
-                                <h5 class="card-title">@article.Title</h5>
-                                <p class="card-text">@article.Description</p>
-                                <p class="card-text"><small class="text-muted">@article.LastUpdated</small></p>
-                            </div>
-                        </div>
-                    </div>
+        <div class="col-lg-4 my-3">
+            <div class="card articleCard mb-3 bg-dark text-white p-2">
+                <img src="@magazine.CoverImage" class="card-img-top imageArticle" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-newspaper me-2"></i>@magazine.Title</h5>
+                    <p class="card-text">
+                        <i class="bi bi-bookmark me-2"></i>
+                        @magazine.Faculty
+                    </p>
+                    <a href="#" class="btn btn-primary">View details</a>
                 </div>
-            </a>
+            </div>
         </div>
     }
 </div>

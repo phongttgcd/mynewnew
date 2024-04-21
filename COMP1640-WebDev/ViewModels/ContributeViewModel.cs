@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace COMP1640_WebDev.ViewModels
 {
-	public class CreateContribute
+	public class ContributeViewModel
 	{
 		public string AcademicYearId { get; set; }
 

@@ -32,7 +32,7 @@ namespace COMP1640_WebDev.Controllers
         {
             var magazineInDb = await _magazineRepository.GetMagazineByID(id);
 
-            string imageBase64Data = Convert.ToBase64String(magazineInDb.CoverImage);
+            string imageBase64Data = Convert.ToBase64String(magazineInDb.CoverImage!);
             string image = string.Format("data:image/jpg;base64, {0}", imageBase64Data);
             ViewBag.Image = image;
 
@@ -90,8 +90,8 @@ namespace COMP1640_WebDev.Controllers
 			var result = await _magazineRepository.GetMagazineByID(id);
 			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
             magazineViewModel.Id = result.Id;
-            magazineViewModel.Title = result.Title;
-            magazineViewModel.Description = result.Description;
+            magazineViewModel.Title = result.Title!;
+            magazineViewModel.Description = result.Description!;
             magazineViewModel.AcademicYearId = result.AcademicYearId;
             magazineViewModel.FacultyId = result.FacultyId;
 
@@ -106,7 +106,7 @@ namespace COMP1640_WebDev.Controllers
 			{
 				var newMagazine = new Magazine
 				{
-                    Id = mViewModel.Id,
+                    Id = mViewModel.Id!,
 					Title = mViewModel.Title,
 					Description = mViewModel.Description,
 					FacultyId = mViewModel.FacultyId,

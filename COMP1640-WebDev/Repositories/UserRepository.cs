@@ -43,7 +43,7 @@ namespace COMP1640_WebDev.Repositories
         {
 
             var user = await _userManager.FindByIdAsync(idUser);
-            return user;
+            return user!;
         }
 
         public IEnumerable<UsersViewModel> GetAllUsers()
@@ -53,7 +53,7 @@ namespace COMP1640_WebDev.Repositories
                 Id = c.Id,
                 Username = c.UserName,
                 Email = c.Email,
-                Faculty = c.Faculty.FacultyName,
+                Faculty = c.Faculty!.FacultyName,
                 Role = string.Join(",", _userManager.GetRolesAsync(c).Result.ToArray())
             }).ToList();
 
@@ -65,7 +65,7 @@ namespace COMP1640_WebDev.Repositories
             var user = await _userManager.FindByIdAsync(idUser);
             if (user == null)
             {
-                return null; 
+                throw new InvalidOperationException($"User with ID {idUser} not found.");
             }
 
             var result = await _userManager.DeleteAsync(user);
@@ -85,7 +85,7 @@ namespace COMP1640_WebDev.Repositories
 
             if (userInDb == null)
             {
-                return null;
+                throw new InvalidOperationException($"User with ID {idUser} not found.");
             }
 
             userInDb.Id = user.Id;

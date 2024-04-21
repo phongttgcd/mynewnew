@@ -15,7 +15,8 @@ namespace COMP1640_WebDev.Repositories.Interfaces
         Task<Magazine> CreateMagazine(Magazine magazine, IFormFile? formFile);
         Task<Magazine> UpdateMagazine(Magazine magazine, IFormFile? formFile);
         Task<Magazine> RemoveMagazine(string id);
-
-
+        List<MagazineTableView> GetAllMagazinesByFaculty(string userFacultyId);
+        List<MagazineTableView> GetAllMagazinesForGuest();
+        List<MagazineTableView> SearchMagazinesByTitle(string title);
     }
 }

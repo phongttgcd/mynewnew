@@ -1,6 +1,7 @@
 ﻿using COMP1640_WebDev.Data;
 using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace COMP1640_WebDev.Repositories
@@ -23,7 +24,7 @@ namespace COMP1640_WebDev.Repositories
                 FacultyName = faculty.FacultyName
             };
 
-            var result = await _dbContext.Faculties.AddAsync(facultyToCreate);
+            var result = await _dbContext.Faculties!.AddAsync(facultyToCreate);
             await _dbContext.SaveChangesAsync();
 
             return result.Entity;
@@ -32,30 +33,37 @@ namespace COMP1640_WebDev.Repositories
         //2. Function to get faculty list
         public async Task<IEnumerable<Faculty>> GetFaculties()
         {
-            return await _dbContext.Faculties.ToListAsync();
+            return await _dbContext.Faculties!.ToListAsync();
         }
 
 
         //3. Function to get faculty by id
-        public async Task<Faculty?> GetFaculty(string idFaculty)
+        public async Task<Faculty> GetFaculty(string idFaculty)
         {
-            var facultyInDB = _dbContext.Faculties
-                .Include(u => u.Magazines)
-             .Include(u => u.Users)
-             .SingleOrDefault(i => i.Id == idFaculty);
+            var facultyInDb = await _dbContext.Faculties!
+                              .Include(f => f.Magazines)
+                              .Include(f => f.Users)
+                              .SingleOrDefaultAsync(f => f.Id == idFaculty);
 
-            if (facultyInDB == null)
+            if (facultyInDb == null)
             {
-                return null;
+                throw new InvalidOperationException($"Faculty with ID {idFaculty} not found.");
             }
 
-            return facultyInDB;
+            return facultyInDb;
         }
 
-        //4. Function to delete faculty by id 
+        //4. Check exist id 
+        public async Task<bool> IsFacultyIdExists(string facultyId)
+        {
+            var existingFaculty = await _dbContext.Faculties!.FirstOrDefaultAsync(f => f.Id == facultyId);
+            return existingFaculty != null;
+        }
+
+        //5. Function to delete faculty by id 
         public async Task<Faculty> RemoveFaculty(string idFaculty)
         {
-            var facultyToRemove = await _dbContext.Faculties.FindAsync(idFaculty);
+            var facultyToRemove = await _dbContext.Faculties!.FindAsync(idFaculty);
 
             if (facultyToRemove == null)
             {
@@ -68,15 +76,15 @@ namespace COMP1640_WebDev.Repositories
             return facultyToRemove;
         }
 
-        //5. Function to update faculty by id
+        //6. Function to update faculty by id
         public async Task<Faculty> UpdateFaculty(string idFaculty, Faculty faculty)
         {
 
-            var facultyInDb = await _dbContext.Faculties.SingleOrDefaultAsync(e => e.Id == idFaculty);
+            var facultyInDb = await _dbContext.Faculties!.SingleOrDefaultAsync(e => e.Id == idFaculty);
 
             if (facultyInDb == null)
             {
-                return null;
+                throw new InvalidOperationException($"Faculty with ID {idFaculty} not found.");
             }
 
             facultyInDb.Id = faculty.Id;

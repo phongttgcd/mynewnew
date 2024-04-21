@@ -19,85 +19,13 @@ namespace COMP1640_WebDev.Repositories
             _dbContext = dbContext;
         }
 
+        // 1. Get all magazines
         public async Task<IEnumerable<Magazine>> GetMagazines()
         {
             return await _dbContext.Magazines!.ToListAsync();
         }
 
-        public async Task<Magazine> RemoveMagazine(string id)
-        {
-            var magazine = await _dbContext.Magazines!.FindAsync(id);
-            if (magazine == null)
-            {
-                throw new KeyNotFoundException($"Magazine with ID {id} not found.");
-            }
-
-            _dbContext.Magazines.Remove(magazine);
-            await _dbContext.SaveChangesAsync();
-            return magazine;
-        }
-
-		public MagazineViewModel GetMagazineViewModel()
-		{
-            var viewModel = new MagazineViewModel()
-            {
-                Falulties = _dbContext.Faculties.ToList(),
-                AcademicYears = _dbContext.AcademicYears.ToList(),
-            };
-            return viewModel;
-		}
-
-		public MagazineViewModel GetMagazineViewModelByID(string idMagazine)
-		{
-			throw new NotImplementedException();
-		}
-
-
-        public async Task<Magazine> CreateMagazine(Magazine magazine, IFormFile? formFile)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                await formFile!.CopyToAsync(memoryStream);
-
-                magazine.CoverImage = memoryStream.ToArray(); 
-           
-
-                var result = await _dbContext.Magazines!.AddAsync(magazine);
-                await _dbContext.SaveChangesAsync();
-                return result.Entity;
-            }
-        }
-
-        public async Task<Magazine> UpdateMagazine(Magazine magazine, IFormFile? formFile)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                await formFile!.CopyToAsync(memoryStream);
-
-                magazine.CoverImage = memoryStream.ToArray();
-
-
-                var result =  _dbContext.Magazines!.Update(magazine);
-                await _dbContext.SaveChangesAsync();
-                return result.Entity;
-            }
-        }
-
-			public async Task<Magazine?> GetMagazineByID(string id)
-        {
-            var magazineInDB = _dbContext.Magazines
-               .Include(u => u.Faculty)
-            .Include(u => u.AcademicYear)
-            .SingleOrDefault(i => i.Id == id);
-
-            if (magazineInDB == null)
-            {
-                return null;
-            }
-
-            return magazineInDB;
-        }
-
+        // 2. Get all magazines with view model
         public IEnumerable<MagazineTableView> GetAllMagazines()
         {
             var magazines = _dbContext.Magazines!.Select(c => new MagazineTableView()
@@ -111,6 +39,7 @@ namespace COMP1640_WebDev.Repositories
             return magazines;
         }
 
+        // 3. Search magazine by attribute and value
         public IEnumerable<MagazineTableView> SearchMagazines(string attribute, string value)
         {
             var magazines = GetAllMagazines();
@@ -130,5 +59,152 @@ namespace COMP1640_WebDev.Repositories
             }
             return magazines;
         }
+
+        // 5. Get magazine view model
+        public MagazineViewModel GetMagazineViewModel()
+        {
+            var viewModel = new MagazineViewModel()
+            {
+                Falulties = _dbContext.Faculties!.ToList(),
+                AcademicYears = _dbContext.AcademicYears!.ToList(),
+            };
+            return viewModel;
+        }
+
+        // 6. Get magazine view model by id
+        public MagazineViewModel GetMagazineViewModelByID(string idMagazine)
+        {
+            throw new NotImplementedException();
+        }
+
+        // 7. Get magazine by id
+        public async Task<Magazine> GetMagazineByID(string id)
+        {
+            var magazineInDB = await _dbContext.Magazines!
+               .Include(u => u.Faculty)
+            .Include(u => u.AcademicYear)
+            .SingleOrDefaultAsync(i => i.Id == id);
+
+            if (magazineInDB == null)
+            {
+                throw new InvalidOperationException($"Magazine with ID {id} not found.");
+            }
+
+            return magazineInDB;
+        }
+
+        // 8. Create new magazine
+        public async Task<Magazine> CreateMagazine(Magazine magazine, IFormFile? formFile)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await formFile!.CopyToAsync(memoryStream);
+
+                magazine.CoverImage = memoryStream.ToArray(); 
+           
+
+                var result = await _dbContext.Magazines!.AddAsync(magazine);
+                await _dbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+        }
+
+        // 9. Update magazine
+        public async Task<Magazine> UpdateMagazine(Magazine magazine, IFormFile? formFile)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await formFile!.CopyToAsync(memoryStream);
+
+                magazine.CoverImage = memoryStream.ToArray();
+
+
+                var result =  _dbContext.Magazines!.Update(magazine);
+                await _dbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+        }
+
+
+        // 10. Remove magazine
+        public async Task<Magazine> RemoveMagazine(string id)
+        {
+            var magazine = await _dbContext.Magazines!.FindAsync(id);
+            if (magazine == null)
+            {
+                throw new KeyNotFoundException($"Magazine with ID {id} not found.");
+            }
+
+            _dbContext.Magazines.Remove(magazine);
+            await _dbContext.SaveChangesAsync();
+            return magazine;
+        }
+
+        // 10. Search magazine by title 
+        public List<MagazineTableView> SearchMagazinesByTitle(string title)
+        {
+            var magazines = _dbContext.Magazines!
+                .Where(m => m.Title!.Contains(title, StringComparison.OrdinalIgnoreCase))
+                .Select(m => new MagazineTableView
+                {
+                    Id = m.Id,
+                    CoverImage = ConvertByteArrayToStringBase64(m.CoverImage!),
+                    Title = m.Title,
+                    Description = m.Description,
+                    Faculty = m.Faculty!.FacultyName
+                }).ToList();
+
+            return magazines;
+        }
+
+        // 11. Get all magazines with by faculty
+        public List<MagazineTableView> GetAllMagazinesByFaculty(string userFacultyId)
+        {
+            var magazinesWithImage = _dbContext.Magazines!
+                .Where(m => m.FacultyId == userFacultyId)
+                .Select(m => new MagazineTableView
+                {
+                    Id = m.Id,
+                    CoverImage = ConvertByteArrayToStringBase64(m.CoverImage!),
+                    Title = m.Title,
+                    Description = m.Description,
+                    Faculty = m.Faculty!.FacultyName 
+                }).ToList();
+
+            return magazinesWithImage;
+        }
+
+        // 12. Get all magazines
+        public List<MagazineTableView> GetAllMagazinesForGuest()
+        {
+            var magazinesWithImage = _dbContext.Magazines!
+                .Select(m => new MagazineTableView
+                {
+                    Id = m.Id,
+                    CoverImage = ConvertByteArrayToStringBase64(m.CoverImage!),
+                    Title = m.Title,
+                    Description = m.Description,
+                    Faculty = m.Faculty != null ? m.Faculty.FacultyName : string.Empty
+                })
+                .ToList();
+
+            return magazinesWithImage;
+        }
+
+
+        // 12. Get all magazines with image
+        private static string ConvertByteArrayToStringBase64(byte[] imageArray)
+        {
+            if (imageArray == null || imageArray.Length == 0)
+            {
+                return null!; 
+            }
+
+            string imageBase64Data = Convert.ToBase64String(imageArray);
+            return string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+        }
+
+      
+
     }
 }
