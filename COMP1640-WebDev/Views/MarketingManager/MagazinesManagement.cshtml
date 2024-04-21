@@ -77,7 +77,7 @@
                     <tr>
                         <th>Title</th>
                         <th>Faculty</th>
-                        <th>Semeter</th>
+                        <th>Start Date</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -157,9 +157,23 @@
             var attribute = document.getElementById("searchAttribute").value;
             var value = document.getElementById("searchInput").value;
 
-            window.location.href = "/MarketingManager/Search?attribute=" + attribute + "&value=" + value;
+            window.location.href = "/MarketingManager/MagazinesManagement?attribute=" + attribute + "&value=" + value;
         });
 
         updateSearchInput();
+    </script>
+
+    <script>
+        function formatDate(dateString) {
+            var parts = dateString.split(' ');
+            var dateParts = parts[0].split('-');
+            var formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+            return formattedDate;
+        }
+
+        document.querySelectorAll('td:nth-child(4)').forEach(function (td) {
+            td.textContent = formatDate(td.textContent);
+        });
+
     </script>
 }

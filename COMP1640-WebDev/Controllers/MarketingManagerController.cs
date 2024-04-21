@@ -39,15 +39,20 @@ namespace COMP1640_WebDev.Controllers
             return View(magazineInDb);
         }
 
-        public IActionResult MagazinesManagementAsync()
+        public IActionResult MagazinesManagementAsync(string? attribute = null, string? value = null)
         {
-            var magazines = _magazineRepository.GetAllMagazines();
-            return View(magazines);
-        }
+            IEnumerable<MagazineTableView> magazines;
+            if (!string.IsNullOrEmpty(attribute) && !string.IsNullOrEmpty(value))
+            {
+                magazines = _magazineRepository.SearchMagazines(attribute, value);
+            }
+            else
+            {
+                magazines = _magazineRepository.GetAllMagazines();
+            }
 
-
-     
-
+            return View("MagazinesManagement", magazines);
+        } 
 
         [HttpGet]
 		public IActionResult CreateMagazine()

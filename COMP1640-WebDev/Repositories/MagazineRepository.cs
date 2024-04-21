@@ -110,5 +110,25 @@ namespace COMP1640_WebDev.Repositories
 
             return magazines;
         }
+
+        public IEnumerable<MagazineTableView> SearchMagazines(string attribute, string value)
+        {
+            var magazines = GetAllMagazines();
+            if (!string.IsNullOrEmpty(attribute) && !string.IsNullOrEmpty(value))
+            {
+                switch (attribute)
+                {
+                    case "Title":
+                        magazines = magazines.Where(u => u.Title != null && u.Title.Contains(value));
+                        break;
+                    case "Faculty":
+                        magazines = magazines.Where(u => u.Faculty != null && u.Faculty.Contains(value));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return magazines;
+        }
     }
 }
