@@ -25,6 +25,18 @@ namespace COMP1640_WebDev.Controllers
             return View(magazines);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            var magazineInDb = await _magazineRepository.GetMagazineByID(id);
+
+            string imageBase64Data = Convert.ToBase64String(magazineInDb.CoverImage!);
+            string image = string.Format("data:image/jpg;base64, {0}", imageBase64Data);
+            ViewBag.Image = image;
+
+            return View(magazineInDb);
+        }
+
         public IActionResult Privacy()
         {
             return View();
