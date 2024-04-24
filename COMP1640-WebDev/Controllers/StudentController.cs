@@ -7,83 +7,100 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 
 namespace COMP1640_WebDev.Controllers
 {
 
-	[Authorize(Roles = "Student")]
-	public class StudentController(IMagazineRepository magazineRepository, IAcademicYearRepository academicYearRepository, UserManager<User> userManager, IContributionRepository contributionRepository, IUserRepository userRepository) : Controller
-	{
-		private readonly IContributionRepository _contributionRepository = contributionRepository;
-		private readonly IAcademicYearRepository _academicYearRepository = academicYearRepository;
-		private readonly IMagazineRepository _magazineRepository = magazineRepository;
+    [Authorize(Roles = "Student")]
+    public class StudentController(IMagazineRepository magazineRepository, IAcademicYearRepository academicYearRepository, UserManager<User> userManager, IContributionRepository contributionRepository, IUserRepository userRepository) : Controller
+    {
+        private readonly IContributionRepository _contributionRepository = contributionRepository;
+        private readonly IAcademicYearRepository _academicYearRepository = academicYearRepository;
+        private readonly IMagazineRepository _magazineRepository = magazineRepository;
         private readonly UserManager<User> _userManager = userManager;
-		private readonly IUserRepository _userRepository = userRepository;
+        private readonly IUserRepository _userRepository = userRepository;
 
 		[HttpGet]
-		public async Task<IActionResult> IndexAsync()
-		{
-            var magazines = await _magazineRepository.GetMagazines();
-            return View();
-		}
+        public async Task<IActionResult> IndexAsync()
+        {
+            List<MagazineTableView> magazines;
+            var user = await _userManager.GetUserAsync(User);
+            var userFacultyId = user!.FacultyId;
+            magazines = _magazineRepository.GetAllMagazinesByFaculty(userFacultyId!);
+            return View(magazines);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            var magazineInDb = await _magazineRepository.GetMagazineByID(id);
+
+            string imageBase64Data = Convert.ToBase64String(magazineInDb.CoverImage!);
+            string image = string.Format("data:image/jpg;base64, {0}", imageBase64Data);
+            ViewBag.Image = image;
+
+            return View(magazineInDb);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> AddComment(CreateContribute data, List<IFormFile> files)
-		{
-			var userId = _userManager.GetUserId(User);
+        public async Task<IActionResult> AddComment(ContributeViewModel data, List<IFormFile> files)
+        {
+            var userId = _userManager.GetUserId(User);
 
-			Contribution contri = new();
-			var user = await _userRepository.GetUser(userId);
-			var academicYear = await _academicYearRepository.GetAcademicYear(data.AcademicYearId);
+            Contribution contri = new();
+            var user = await _userRepository.GetUser(userId!);
+            var academicYear = await _academicYearRepository.GetAcademicYear(data.AcademicYearId);
            
-			using (var memoryStream = new MemoryStream())
-			{
-				await files[0].CopyToAsync(memoryStream);
-				contri.AcademicYearId = data.AcademicYearId;
+            using (var memoryStream = new MemoryStream())
+            {
+                await files[0].CopyToAsync(memoryStream);
+                contri.AcademicYearId = data.AcademicYearId;
                 contri.Title = data.Title;
                 contri.Document = data.Document;
                 contri.UserId = userId;
-                contri.Image =  memoryStream.ToArray();
+                contri.Image = memoryStream.ToArray();
                 contri.IsEnabled = true;
-			};
-			if (DateTime.Now > academicYear.ClosureDate)
-			{
-				contri.IsEnabled = false;
+            };
+            if (DateTime.Now > academicYear.ClosureDate)
+            {
+                contri.IsEnabled = false;
 
-			}
-			await _contributionRepository.CreateContribution(contri);
+            }
+            await _contributionRepository.CreateContribution(contri);
 
-			return View();
+            return View();
         }
 
-		[HttpGet]
-		public async Task<IActionResult> EditComment(string id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
+        [HttpGet]
+        public async Task<IActionResult> EditComment(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-			var comment = await _contributionRepository.GetContribution(id);
-			if (comment == null)
-			{
-				return NotFound();
-			}
+            var comment = await _contributionRepository.GetContribution(id);
+            if (comment == null)
+            {
+                return NotFound();
+            }
 
-			return View(comment);
-		}
+            return View(comment);
+        }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> EditComment(string id, Contribution updateContribution)
-		{
-			if (ModelState.IsValid)
-			{
-				await _contributionRepository.UpdateContribution(id, updateContribution);
-				TempData["AlertMessage"] = "Updated successfully!!!";
-				return RedirectToAction("Index");
-			}
-			return View(updateContribution);
-		}
-	}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditComment(string id, Contribution updateContribution)
+        {
+            if (ModelState.IsValid)
+            {
+                await _contributionRepository.UpdateContribution(id, updateContribution);
+                TempData["AlertMessage"] = "Updated successfully!!!";
+                return RedirectToAction("Index");
+            }
+            return View(updateContribution);
+        }
+    }
 }

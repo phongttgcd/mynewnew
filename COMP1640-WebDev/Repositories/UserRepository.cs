@@ -20,13 +20,21 @@ namespace COMP1640_WebDev.Repositories
 
         public async Task<int[]> GetUserCounts()
         {
-            int[] userCounts = new int[2]; 
+            int[] userCounts = new int[4]; 
 
-            var studentsCount = await _userManager.GetUsersInRoleAsync("Student");
-            userCounts[0] = studentsCount.Count;
+            var adminsCount = await  _userManager.GetUsersInRoleAsync("Admin");
+            userCounts[0] = adminsCount.Count;
 
             var marketingManagersCount = await _userManager.GetUsersInRoleAsync("Marketing Manager");
             userCounts[1] = marketingManagersCount.Count;
+
+            var marketingCoordinatorsCount = await _userManager.GetUsersInRoleAsync("Marketing Coordinator");
+            userCounts[2] = marketingCoordinatorsCount.Count;
+
+            var studentsCount = await _userManager.GetUsersInRoleAsync("Student");
+            userCounts[3] = studentsCount.Count;
+
+       
 
             return userCounts;
         }
@@ -35,7 +43,7 @@ namespace COMP1640_WebDev.Repositories
         {
 
             var user = await _userManager.FindByIdAsync(idUser);
-            return user;
+            return user!;
         }
 
         public IEnumerable<UsersViewModel> GetAllUsers()
@@ -45,7 +53,7 @@ namespace COMP1640_WebDev.Repositories
                 Id = c.Id,
                 Username = c.UserName,
                 Email = c.Email,
-                Faculty = c.Faculty.FacultyName,
+                Faculty = c.Faculty!.FacultyName,
                 Role = string.Join(",", _userManager.GetRolesAsync(c).Result.ToArray())
             }).ToList();
 
@@ -57,7 +65,7 @@ namespace COMP1640_WebDev.Repositories
             var user = await _userManager.FindByIdAsync(idUser);
             if (user == null)
             {
-                return null; 
+                throw new InvalidOperationException($"User with ID {idUser} not found.");
             }
 
             var result = await _userManager.DeleteAsync(user);
@@ -77,7 +85,7 @@ namespace COMP1640_WebDev.Repositories
 
             if (userInDb == null)
             {
-                return null;
+                throw new InvalidOperationException($"User with ID {idUser} not found.");
             }
 
             userInDb.Id = user.Id;

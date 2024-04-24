@@ -10,5 +10,7 @@ namespace COMP1640_WebDev.Repositories.Interfaces
         Task<AcademicYear> CreateAcademicYear(AcademicYear academicYear);
         Task<AcademicYear> RemoveAcademicYear(string idAcademicYear);
         Task<AcademicYear> UpdateAcademicYear(string id, AcademicYear academicYear);
+        Task<bool> IsAcademicYearIdExists(string idAcademicYear);
+
     }
 }

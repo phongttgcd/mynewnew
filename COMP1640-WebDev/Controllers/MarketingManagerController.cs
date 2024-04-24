@@ -1,4 +1,5 @@
 ﻿using COMP1640_WebDev.Models;
+using COMP1640_WebDev.Repositories;
 using COMP1640_WebDev.Repositories.Interfaces;
 using COMP1640_WebDev.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -31,21 +32,29 @@ namespace COMP1640_WebDev.Controllers
         {
             var magazineInDb = await _magazineRepository.GetMagazineByID(id);
 
-            string imageBase64Data = Convert.ToBase64String(magazineInDb.CoverImage);
+            string imageBase64Data = Convert.ToBase64String(magazineInDb.CoverImage!);
             string image = string.Format("data:image/jpg;base64, {0}", imageBase64Data);
             ViewBag.Image = image;
 
             return View(magazineInDb);
         }
 
-        public async Task<IActionResult> MagazinesManagementAsync()
+        public IActionResult MagazinesManagementAsync(string? attribute = null, string? value = null)
         {
-            var magazines = await _magazineRepository.GetMagazines();
-            return View(magazines);
-        }
+            IEnumerable<MagazineTableView> magazines;
+            if (!string.IsNullOrEmpty(attribute) && !string.IsNullOrEmpty(value))
+            {
+                magazines = _magazineRepository.SearchMagazines(attribute, value);
+            }
+            else
+            {
+                magazines = _magazineRepository.GetAllMagazines();
+            }
 
+            return View("MagazinesManagement", magazines);
+        } 
 
-		[HttpGet]
+        [HttpGet]
 		public IActionResult CreateMagazine()
 		{       
 			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
@@ -81,8 +90,8 @@ namespace COMP1640_WebDev.Controllers
 			var result = await _magazineRepository.GetMagazineByID(id);
 			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
             magazineViewModel.Id = result.Id;
-            magazineViewModel.Title = result.Title;
-            magazineViewModel.Description = result.Description;
+            magazineViewModel.Title = result.Title!;
+            magazineViewModel.Description = result.Description!;
             magazineViewModel.AcademicYearId = result.AcademicYearId;
             magazineViewModel.FacultyId = result.FacultyId;
 
@@ -97,7 +106,7 @@ namespace COMP1640_WebDev.Controllers
 			{
 				var newMagazine = new Magazine
 				{
-                    Id = mViewModel.Id,
+                    Id = mViewModel.Id!,
 					Title = mViewModel.Title,
 					Description = mViewModel.Description,
 					FacultyId = mViewModel.FacultyId,
@@ -105,7 +114,7 @@ namespace COMP1640_WebDev.Controllers
 
 				};
 				await _magazineRepository.UpdateMagazine(newMagazine, mViewModel.FormFile);
-				TempData["AlertMessage"] = "Magazine created successfully!!!";
+				TempData["AlertMessage"] = "Magazine updated successfully!!!";
 				return RedirectToAction("MagazinesManagement");
 			}
 
@@ -113,7 +122,24 @@ namespace COMP1640_WebDev.Controllers
 			return View(magazineViewModel);
 		}
 
-		public IActionResult DataManagement()
+        [HttpGet]
+        public async Task<IActionResult> DeleteMagazine(string id)
+        {
+            var removedMagazine = await _magazineRepository.RemoveMagazine(id);
+
+            if (removedMagazine == null)
+            {
+                TempData["AlertMessage"] = "Error: Unable to delete Magazine. Magazine not found or some other error occurred.";
+            }
+            else
+            {
+                TempData["AlertMessage"] = "Success: Magazine deleted successfully!";
+            }
+
+            return RedirectToAction("MagazinesManagement");
+        }
+
+        public IActionResult DataManagement()
         {
             var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
             var fileModels = Directory.GetFiles(uploadsPath)

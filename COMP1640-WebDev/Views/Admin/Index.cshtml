@@ -6,7 +6,7 @@
     <h1 class="mb-3">Dashboard</h1>
 
     <div class="row ">
-        <div class="col-lg-4 mb-4">
+        <div class="col-lg-12 mb-4">
             <div class="card bg-success text-white" style="height: 100%;">
                 <div class="card-body">
                     <h5 class="card-title">Total User Accounts</h5>
@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Total Faculties</h5>
                     <canvas id="facultiesChart" style="height: 200px;"></canvas>
-                </div>
+    </div>
             </div>
         </div>
 
@@ -81,11 +81,13 @@
         var usersChart = new Chart(document.getElementById('usersChart'), {
             type: 'bar',
             data: {
-                labels: ['Student','Marketing Coordinator'],
+                labels: ['Admin', 'Marketing Manager', 'Marketing Coordinator', 'Student'],
                 datasets: [{
                     label: 'Number of Users',
                     data: usersData,
-                    backgroundColor: ['#4CAF50', '#4CAF50', '#4CAF50']
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'], // Different colors for each column
+                    borderColor: 'black', // Border color of the bars
+                    borderWidth: 1 // Border width of the bars
                 }]
             },
             options: {
@@ -95,7 +97,7 @@
                         ticks: {
                             color: 'white',
                             max: 100,
-                            min: 0 
+                            min: 0
                         }
 
                     },
@@ -111,27 +113,16 @@
                             color: 'white'
                         }
                     }
-                }
-            }
-        });
-
-        // Create semesters chart
-        var semestersChart = new Chart(document.getElementById('semestersChart'), {
-            type: 'doughnut',
-            data: {
-                labels: [],
-                datasets: [{
-                    data: semestersData,
-                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
-                        }
-                    }
+                },
+                // Change chart background color to black
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 10
+                    },
+                    backgroundColor: 'black'
                 }
             }
         });

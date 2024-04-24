@@ -15,15 +15,15 @@ namespace COMP1640_WebDev.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<AcademicYear>? GetAcademicYear(string idAcademicYear)
+        public async Task<AcademicYear> GetAcademicYear(string idAcademicYear)
         {
-            var academicYearInDB = _dbContext.AcademicYears
+            var academicYearInDB = await _dbContext.AcademicYears!
                   .Include(u => u.Magazines)
-               .SingleOrDefault(i => i.Id == idAcademicYear);
+               .SingleOrDefaultAsync(i => i.Id == idAcademicYear);
 
             if (academicYearInDB == null)
             {
-                return null;
+                throw new InvalidOperationException($"Semester with ID {idAcademicYear} not found.");
             }
 
             return academicYearInDB;
@@ -31,7 +31,7 @@ namespace COMP1640_WebDev.Repositories
 
         public async Task<IEnumerable<AcademicYear>> GetAcademicYears()
         {
-            return await _dbContext.AcademicYears.ToListAsync();
+            return await _dbContext.AcademicYears!.ToListAsync();
         }
 
         public async Task<AcademicYear> CreateAcademicYear(AcademicYear academicYear)
@@ -45,7 +45,7 @@ namespace COMP1640_WebDev.Repositories
               
 			};
 
-			var result = await _dbContext.AcademicYears.AddAsync(semesterToCreate);
+			var result = await _dbContext.AcademicYears!.AddAsync(semesterToCreate);
 			await _dbContext.SaveChangesAsync();
 
 			return result.Entity;
@@ -53,11 +53,11 @@ namespace COMP1640_WebDev.Repositories
 
 		public async Task<AcademicYear> UpdateAcademicYear(string idAcademicYear, AcademicYear academicYear)
 		{
-            var academicYearInDb = await _dbContext.AcademicYears.SingleOrDefaultAsync(e => e.Id == idAcademicYear);
+            var academicYearInDb = await _dbContext.AcademicYears!.SingleOrDefaultAsync(e => e.Id == idAcademicYear);
 
             if (academicYearInDb == null)
             {
-                return null;
+                throw new InvalidOperationException($"Semester with ID {idAcademicYear} not found.");
             }
 
             academicYearInDb.Id = academicYear.Id;
@@ -73,7 +73,7 @@ namespace COMP1640_WebDev.Repositories
 
         public async Task<AcademicYear> RemoveAcademicYear(string idAcademicYear)
         {
-            var academicYearToRemove = await _dbContext.AcademicYears.FindAsync(idAcademicYear);
+            var academicYearToRemove = await _dbContext.AcademicYears!.FindAsync(idAcademicYear);
 
             if (academicYearToRemove == null)
             {
@@ -86,6 +86,10 @@ namespace COMP1640_WebDev.Repositories
             return academicYearToRemove;
         }
 
-		
-	}
+        public async Task<bool> IsAcademicYearIdExists(string idAcademicYear)
+        {
+            var existingAcademicYear = await _dbContext.AcademicYears!.FirstOrDefaultAsync(f => f.Id == idAcademicYear);
+            return existingAcademicYear != null;
+        }
+    }
 }

@@ -8,12 +8,15 @@ namespace COMP1640_WebDev.Repositories.Interfaces
     {
 		MagazineViewModel GetMagazineViewModel();
 		MagazineViewModel GetMagazineViewModelByID(string idMagazine);
-		Task<IEnumerable<Magazine>> GetMagazines();
+        IEnumerable<MagazineTableView> GetAllMagazines();
+        IEnumerable<MagazineTableView> SearchMagazines(string attribute, string value);
+        Task<IEnumerable<Magazine>> GetMagazines();
         Task<Magazine> GetMagazineByID(string id);
         Task<Magazine> CreateMagazine(Magazine magazine, IFormFile? formFile);
         Task<Magazine> UpdateMagazine(Magazine magazine, IFormFile? formFile);
         Task<Magazine> RemoveMagazine(string id);
-
-
+        List<MagazineTableView> GetAllMagazinesByFaculty(string userFacultyId);
+        List<MagazineTableView> GetAllMagazinesForGuest();
+        List<MagazineTableView> SearchMagazinesByTitle(string title);
     }
 }
