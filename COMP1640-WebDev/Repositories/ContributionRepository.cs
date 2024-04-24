@@ -7,83 +7,98 @@ using NuGet.Protocol;
 
 namespace COMP1640_WebDev.Repositories
 {
-    public class ContributionRepository : IContributionRepository
-    {
-        private readonly ApplicationDbContext _dbContext;
+	public class ContributionRepository : IContributionRepository
+	{
+		private readonly ApplicationDbContext _dbContext;
 
-        public ContributionRepository(ApplicationDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-        public async Task<Contribution> CreateContribution(Contribution contribution)
-        {
-         
-          
-                var result = await _dbContext.Contributions.AddAsync(contribution);
-                await _dbContext.SaveChangesAsync();
+		public ContributionRepository(ApplicationDbContext dbContext)
+		{
+			_dbContext = dbContext;
+		}
+		public async Task<Contribution> CreateContribution(Contribution contribution, IFormFile? formFile)
+		{
+			using (var memoryStream = new MemoryStream())
+			{
+				await formFile!.CopyToAsync(memoryStream);
 
-                return result.Entity;
-            
-                       
-        }
+				contribution.Image = memoryStream.ToArray();
 
-        public async Task<Contribution> GetContribution(string idContribution)
-        {
-            var contributionInDB = _dbContext.Contributions
-            .Include(i => i.AcademicYear)
-            .Include(u => u.User)
-            .SingleOrDefault(i => i.Id == idContribution);
 
-            if (contributionInDB == null)
-            {
-                return null;
-            }
+				var result = await _dbContext.Contributions.AddAsync(contribution);
+				await _dbContext.SaveChangesAsync();
 
-            return contributionInDB;
-        }
+				return result.Entity;
+			}
+		}
 
-            public async Task<IEnumerable<Contribution>> GetContributions()
-        {
-            return await _dbContext.Contributions.ToListAsync();
+		public async Task<Contribution> GetContribution(string idContribution)
+		{
+			var contributionInDB = _dbContext.Contributions
+			.Include(i => i.AcademicYear)
+			.Include(u => u.User)
+			.SingleOrDefault(i => i.Id == idContribution);
 
-        }
+			if (contributionInDB == null)
+			{
+				return null;
+			}
 
-        public async Task<IEnumerable<Contribution>> GetContributionsInprogess()
-        {
-            return await _dbContext.Contributions.Where(c => c.Status == Enum.BrowserComment.InProgess).ToListAsync();
+			return contributionInDB;
+		}
 
-        }
-        public Task<Contribution> RemoveContribution(string idContribution)
-        {
-            throw new NotImplementedException();
-        }
+		public async Task<IEnumerable<Contribution>> GetContributions()
+		{
+			return await _dbContext.Contributions.ToListAsync();
 
-     
-        public async Task<Contribution> UpdateContribution(string idContribution, Contribution contribution)
-        {
-            var academicYear = await _dbContext.AcademicYears.SingleOrDefaultAsync(a => a.Id == contribution.AcademicYearId);
+		}
 
-            if (contribution.SubmissionDate > academicYear.FinalDate)
-            {
-                return null;
-            }
-            else
-            {
-                var contributionInDb = await _dbContext.Contributions
-               .SingleOrDefaultAsync(e => e.Id == idContribution);
+		public async Task<IEnumerable<Contribution>> GetContributionsInprogess()
+		{
+			return await _dbContext.Contributions.Include(u => u.User).Where(c => c.Status == Enum.BrowserComment.InProgess).ToListAsync();
 
-                if (contributionInDb == null)
-                {
-                    return null;
-                }
+		}
 
-                contributionInDb.Title = contribution.Title;
-                contributionInDb.Document = contribution.Document;
-                contributionInDb.Image = contribution.Image;
-                await _dbContext.SaveChangesAsync();
+		public async Task<List<Contribution>> GetContributionsAccept()
+		{
+			return await _dbContext.Contributions.Include(u => u.User).Where(c => c.Status == Enum.BrowserComment.Accepted).ToListAsync();
 
-                return contribution;
-            }
-        }
-    }
+		}
+		public Task<Contribution> RemoveContribution(string idContribution)
+		{
+			throw new NotImplementedException();
+		}
+
+
+		public async Task<Contribution> UpdateContribution(string idContribution, Contribution contribution)
+		{
+			var academicYear = await _dbContext.AcademicYears.SingleOrDefaultAsync(a => a.Id == contribution.AcademicYearId);
+
+			if (contribution.SubmissionDate > academicYear.FinalDate)
+			{
+				return null;
+			}
+			else
+			{
+				var contributionInDb = await _dbContext.Contributions
+			   .SingleOrDefaultAsync(e => e.Id == idContribution);
+
+				if (contributionInDb == null)
+				{
+					return null;
+				}
+
+				contributionInDb.Title = contribution.Title;
+				contributionInDb.Document = contribution.Document;
+				contributionInDb.Image = contribution.Image;
+				await _dbContext.SaveChangesAsync();
+
+				return contribution;
+			}
+		}
+
+		public Task<Contribution> CreateContribution(Contribution contribution)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

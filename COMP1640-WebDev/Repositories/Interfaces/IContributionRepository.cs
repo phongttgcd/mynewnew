@@ -6,8 +6,10 @@ namespace COMP1640_WebDev.Repositories.Interfaces
     {
         Task<IEnumerable<Contribution>> GetContributions();
         Task<IEnumerable<Contribution>> GetContributionsInprogess();
+
+        Task<List<Contribution>> GetContributionsAccept();
         Task<Contribution> GetContribution(string idContribution);
-        Task<Contribution> CreateContribution(Contribution contribution);
+        Task<Contribution> CreateContribution(Contribution contribution, IFormFile? formFile);
         Task<Contribution> RemoveContribution(string idContribution);
         Task<Contribution> UpdateContribution(string idContribution, Contribution contribution);
     }

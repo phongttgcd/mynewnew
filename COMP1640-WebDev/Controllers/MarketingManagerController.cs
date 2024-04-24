@@ -14,72 +14,72 @@ using System.IO.Compression;
 namespace COMP1640_WebDev.Controllers
 {
 
-    [Authorize(Roles = "Marketing Manager")]
-    public class MarketingManagerController(IWebHostEnvironment hostEnvironment, IMagazineRepository magazineRepository, IAcademicYearRepository academicYearRepository, IFacultyRepository facultyRepository) : Controller
-    {
-        private readonly IMagazineRepository _magazineRepository = magazineRepository;
+	[Authorize(Roles = "Marketing Manager")]
+	public class MarketingManagerController(IWebHostEnvironment hostEnvironment, IMagazineRepository magazineRepository, IAcademicYearRepository academicYearRepository, IFacultyRepository facultyRepository) : Controller
+	{
+		private readonly IMagazineRepository _magazineRepository = magazineRepository;
 		private readonly IAcademicYearRepository _academicYearRepository = academicYearRepository;
 		private readonly IFacultyRepository _facultyRepository = facultyRepository;
-        private readonly IWebHostEnvironment _hostEnvironment = hostEnvironment;
+		private readonly IWebHostEnvironment _hostEnvironment = hostEnvironment;
 
 		public IActionResult Index()
-        {
-            return View();
-        }
+		{
+			return View();
+		}
 
-        [HttpGet]
-        public async Task<IActionResult> DetailsMagazine(string id)
-        {
-            var magazineInDb = await _magazineRepository.GetMagazineByID(id);
+		[HttpGet]
+		public async Task<IActionResult> DetailsMagazine(string id)
+		{
+			var magazineInDb = await _magazineRepository.GetMagazineByID(id);
 
-            string imageBase64Data = Convert.ToBase64String(magazineInDb.CoverImage!);
-            string image = string.Format("data:image/jpg;base64, {0}", imageBase64Data);
-            ViewBag.Image = image;
+			string imageBase64Data = Convert.ToBase64String(magazineInDb.CoverImage!);
+			string image = string.Format("data:image/jpg;base64, {0}", imageBase64Data);
+			ViewBag.Image = image;
 
-            return View(magazineInDb);
-        }
+			return View(magazineInDb);
+		}
 
-        public IActionResult MagazinesManagementAsync(string? attribute = null, string? value = null)
-        {
-            IEnumerable<MagazineTableView> magazines;
-            if (!string.IsNullOrEmpty(attribute) && !string.IsNullOrEmpty(value))
-            {
-                magazines = _magazineRepository.SearchMagazines(attribute, value);
-            }
-            else
-            {
-                magazines = _magazineRepository.GetAllMagazines();
-            }
+		public IActionResult MagazinesManagementAsync(string? attribute = null, string? value = null)
+		{
+			IEnumerable<MagazineTableView> magazines;
+			if (!string.IsNullOrEmpty(attribute) && !string.IsNullOrEmpty(value))
+			{
+				magazines = _magazineRepository.SearchMagazines(attribute, value);
+			}
+			else
+			{
+				magazines = _magazineRepository.GetAllMagazines();
+			}
 
-            return View("MagazinesManagement", magazines);
-        } 
+			return View("MagazinesManagement", magazines);
+		}
 
-        [HttpGet]
+		[HttpGet]
 		public IActionResult CreateMagazine()
-		{       
+		{
 			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
-            return View(magazineViewModel);
+			return View(magazineViewModel);
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> CreateMagazine(MagazineViewModel mViewModel)
-        {
+		{
 			if (ModelState.IsValid)
 			{
-                var newMagazine = new Magazine
-                {
-                    Title = mViewModel.Title,
-                    Description = mViewModel.Description,
-                    FacultyId = mViewModel.FacultyId,
-                    AcademicYearId = mViewModel.AcademicYearId
+				var newMagazine = new Magazine
+				{
+					Title = mViewModel.Title,
+					Description = mViewModel.Description,
+					FacultyId = mViewModel.FacultyId,
+					AcademicYearId = mViewModel.AcademicYearId
 
-                };
-                await _magazineRepository.CreateMagazine(newMagazine, mViewModel.FormFile);
+				};
+				await _magazineRepository.CreateMagazine(newMagazine, mViewModel.FormFile);
 				TempData["AlertMessage"] = "Magazine created successfully!!!";
 				return RedirectToAction("MagazinesManagement");
 			}
-		
+
 			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
 			return View(magazineViewModel);
 		}
@@ -89,12 +89,13 @@ namespace COMP1640_WebDev.Controllers
 		{
 			var result = await _magazineRepository.GetMagazineByID(id);
 			var magazineViewModel = _magazineRepository.GetMagazineViewModel();
-            magazineViewModel.Id = result.Id;
-            magazineViewModel.Title = result.Title!;
-            magazineViewModel.Description = result.Description!;
-            magazineViewModel.AcademicYearId = result.AcademicYearId;
-            magazineViewModel.FacultyId = result.FacultyId;
-
+			magazineViewModel.Id = result.Id;
+			magazineViewModel.Title = result.Title!;
+			magazineViewModel.Description = result.Description!;
+			magazineViewModel.AcademicYearId = result.AcademicYearId;
+			magazineViewModel.FacultyId = result.FacultyId;
+			string imageString = Convert.ToBase64String(result.CoverImage);
+			@ViewBag.Image = string.Format("data:image/jpg;base64, {0}", imageString);
 			return View(magazineViewModel);
 		}
 
@@ -106,7 +107,7 @@ namespace COMP1640_WebDev.Controllers
 			{
 				var newMagazine = new Magazine
 				{
-                    Id = mViewModel.Id!,
+					Id = mViewModel.Id!,
 					Title = mViewModel.Title,
 					Description = mViewModel.Description,
 					FacultyId = mViewModel.FacultyId,
@@ -122,79 +123,79 @@ namespace COMP1640_WebDev.Controllers
 			return View(magazineViewModel);
 		}
 
-        [HttpGet]
-        public async Task<IActionResult> DeleteMagazine(string id)
-        {
-            var removedMagazine = await _magazineRepository.RemoveMagazine(id);
+		[HttpGet]
+		public async Task<IActionResult> DeleteMagazine(string id)
+		{
+			var removedMagazine = await _magazineRepository.RemoveMagazine(id);
 
-            if (removedMagazine == null)
-            {
-                TempData["AlertMessage"] = "Error: Unable to delete Magazine. Magazine not found or some other error occurred.";
-            }
-            else
-            {
-                TempData["AlertMessage"] = "Success: Magazine deleted successfully!";
-            }
+			if (removedMagazine == null)
+			{
+				TempData["AlertMessage"] = "Error: Unable to delete Magazine. Magazine not found or some other error occurred.";
+			}
+			else
+			{
+				TempData["AlertMessage"] = "Success: Magazine deleted successfully!";
+			}
 
-            return RedirectToAction("MagazinesManagement");
-        }
+			return RedirectToAction("MagazinesManagement");
+		}
 
-        public IActionResult DataManagement()
-        {
-            var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
-            var fileModels = Directory.GetFiles(uploadsPath)
-                                      .Select(file => Path.GetFileName(file))
-                                      .ToList();       
-            return View(fileModels);
-        }
+		public IActionResult DataManagement()
+		{
+			var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+			var fileModels = Directory.GetFiles(uploadsPath)
+									  .Select(file => Path.GetFileName(file))
+									  .ToList();
+			return View(fileModels);
+		}
 
 
-        public IActionResult DownloadZip1()
-        {
-            var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+		public IActionResult DownloadZip1()
+		{
+			var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
 
-            var tempZipFileName = "MarketingFiles.zip";
-            var tempZipPath = Path.Combine(Path.GetTempPath(), tempZipFileName);
+			var tempZipFileName = "MarketingFiles.zip";
+			var tempZipPath = Path.Combine(Path.GetTempPath(), tempZipFileName);
 
-            if (System.IO.File.Exists(tempZipPath))
-            {
-                System.IO.File.Delete(tempZipPath);
-            }
+			if (System.IO.File.Exists(tempZipPath))
+			{
+				System.IO.File.Delete(tempZipPath);
+			}
 
-            using (var zipStream = new FileStream(tempZipPath, FileMode.CreateNew))
-            using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
-            {
-                var files = Directory.GetFiles(uploadsPath);
-                foreach (var filePath in files)
-                {
-                    var fileInfo = new FileInfo(filePath);
-                    var entry = archive.CreateEntry(fileInfo.Name);
-                    using (var entryStream = entry.Open())
-                    using (var fileStream = System.IO.File.OpenRead(filePath))
-                    {
-                        fileStream.CopyTo(entryStream);
-                    }
-                }
-            }
-            return PhysicalFile(tempZipPath, "application/zip", tempZipFileName);
-        }
+			using (var zipStream = new FileStream(tempZipPath, FileMode.CreateNew))
+			using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+			{
+				var files = Directory.GetFiles(uploadsPath);
+				foreach (var filePath in files)
+				{
+					var fileInfo = new FileInfo(filePath);
+					var entry = archive.CreateEntry(fileInfo.Name);
+					using (var entryStream = entry.Open())
+					using (var fileStream = System.IO.File.OpenRead(filePath))
+					{
+						fileStream.CopyTo(entryStream);
+					}
+				}
+			}
+			return PhysicalFile(tempZipPath, "application/zip", tempZipFileName);
+		}
 
-        public IActionResult DownloadSingleFile(string file)
-        {
-            if (string.IsNullOrEmpty(file))
-            {
-                return BadRequest("Invalid file name.");
-            }
+		public IActionResult DownloadSingleFile(string file)
+		{
+			if (string.IsNullOrEmpty(file))
+			{
+				return BadRequest("Invalid file name.");
+			}
 
-            var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+			var uploadsPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
 
-            var filePath = Path.Combine(uploadsPath, file);
-            if (!System.IO.File.Exists(filePath))
-            {
-                return NotFound();
-            }
+			var filePath = Path.Combine(uploadsPath, file);
+			if (!System.IO.File.Exists(filePath))
+			{
+				return NotFound();
+			}
 
-            return PhysicalFile(filePath, "application/octet-stream", file);
-        }
-    }
+			return PhysicalFile(filePath, "application/octet-stream", file);
+		}
+	}
 }

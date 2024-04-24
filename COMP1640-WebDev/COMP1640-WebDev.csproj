@@ -37,6 +37,7 @@
     <Folder Include="wwwroot\lib\jquery\" />
     <Folder Include="wwwroot\lib\jquery\dist\" />
     <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\document\" />
   </ItemGroup>
 
 </Project>

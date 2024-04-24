@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Contribution>
+@{
     Layout = "./Layout/_MCLayout";
 }
 
@@ -50,7 +51,19 @@
                 </tr>
             </thead>
             <tbody>
-               
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row" hidden>@item.Id</th>
+                        <td>@item.Id</td>
+                        <td>@item.Title</td>
+                        <td>@item.User.UserName</td>
+                        <td>
+                            <a asp-action="Accept" asp-controller="MarketingCoordinator" asp-route-id="@item.Id" class="btn btn-primary">Accept</a>
+                            <a asp-action="Reject" asp-controller="MarketingCoordinator" asp-route-id="@item.Id" class="btn btn-danger">Reject</a>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>

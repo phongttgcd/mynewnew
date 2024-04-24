@@ -2,6 +2,8 @@ using COMP1640_WebDev.Data;
 using COMP1640_WebDev.Models;
 using COMP1640_WebDev.Repositories;
 using COMP1640_WebDev.Repositories.Interfaces;
+using COMP1640_WebDev.Services;
+using COMP1640_WebDev.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +26,7 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
 builder.Services.AddScoped<IMagazineRepository, MagazineRepository>();
 builder.Services.AddScoped<IContributionRepository, ContributionRepository>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 var app = builder.Build();
