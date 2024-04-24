@@ -8,11 +8,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace COMP1640_WebDev.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_database : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AcademicYears",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FinalDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ClosureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AcademicYears", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -61,27 +75,6 @@ namespace COMP1640_WebDev.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AcademicYears",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FacultyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FinalDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ClosureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AcademicYears", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AcademicYears_Faculties_FacultyId",
-                        column: x => x.FacultyId,
-                        principalTable: "Faculties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -121,8 +114,8 @@ namespace COMP1640_WebDev.Migrations
                     Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CoverImage = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    FacultyId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    AcademicYearId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    FacultyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AcademicYearId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -131,12 +124,14 @@ namespace COMP1640_WebDev.Migrations
                         name: "FK_Magazines_AcademicYears_AcademicYearId",
                         column: x => x.AcademicYearId,
                         principalTable: "AcademicYears",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Magazines_Faculties_FacultyId",
                         column: x => x.FacultyId,
                         principalTable: "Faculties",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -234,9 +229,11 @@ namespace COMP1640_WebDev.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Document = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ImageString = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsEnabled = table.Column<bool>(type: "bit", nullable: false),
                     IsSelected = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CommentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -321,11 +318,6 @@ namespace COMP1640_WebDev.Migrations
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[] { "089967f7-aeef-4edb-8fff-b2945b7f67ee", "089967f7-aeef-4edb-8fff-b2945b7f67e1" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AcademicYears_FacultyId",
-                table: "AcademicYears",
-                column: "FacultyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

@@ -57,9 +57,7 @@ namespace COMP1640_WebDev.Repositories
                         break;
                 }
 
-            _dbContext.Magazines.Remove(magazine);
-            await _dbContext.SaveChangesAsync();
-            return magazine;
+  
             }
             return magazines;
         }

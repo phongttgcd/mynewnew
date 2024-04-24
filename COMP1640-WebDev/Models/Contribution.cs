@@ -20,6 +20,7 @@ namespace COMP1640_WebDev.Models
         public string Title { get; set; } = string.Empty;
         public string Document { get; set; } = string.Empty;
         public byte[] Image { get; set; }
+        public string ImageString { get; set; }
 
         public DateTime SubmissionDate { get; set; }=DateTime.Now;
         public bool IsEnabled { get; set; }

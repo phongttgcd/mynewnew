@@ -65,6 +65,10 @@ namespace COMP1640_WebDev.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("ImageString")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("bit");
 
