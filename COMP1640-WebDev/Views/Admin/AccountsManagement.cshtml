@@ -87,7 +87,14 @@
                     <tr>
                         <th>@user.Username</th>
                         <td>@user.Email</td>
-                        <td>@user.Faculty</td>
+                        @if(user.Role!.Equals("Marketing Manager"))
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>@user.Faculty</td>
+                        }
                         <td>@user.Role</td>
                         <td class="d-flex justify-content-center">
                             <a class="btn btn-primary me-3" asp-controller="Admin" asp-action="EditUser" asp-route-id=@user.Id><i class="bi bi-pencil-square me-2"></i>Edit</a>
