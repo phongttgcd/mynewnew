@@ -19,13 +19,9 @@ namespace COMP1640_WebDev.Controllers
 
 		public async Task<IActionResult> IndexAsync()
         {
-            var facultiesData = new int[] { 30, 20, 10 };
             int[] usersData = await _userRepository.GetUserCounts();
-            var semestersData = new int[] { 20, 15, 25 };
 
-            ViewBag.FacultiesData = facultiesData;
             ViewBag.UsersData = usersData;
-            ViewBag.SemestersData = semestersData;
 
             return View();
         }

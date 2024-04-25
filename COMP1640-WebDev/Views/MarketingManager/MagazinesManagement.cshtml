@@ -1,10 +1,8 @@
 ﻿@using COMP1640_WebDev.ViewModels
 @model IEnumerable<MagazineTableView>
-
 @{
     Layout = "./Layout/_MMLayout";
 }
-
 <style>
     .table-3d {
         border-collapse: separate;
@@ -32,22 +30,17 @@
         max-height: 500px;
         overflow-y: auto;
     }
-
 </style>
-
 <div class="px-4 mt-4 min-vh-100">
     <div class="mb-3">
         <h1 class="admin-heading">Magazines Management</h1>
     </div>
-
     <div class="row mb-3">
         <div class="col col-lg-8">
             <input type="text" id="searchInput" class="form-control" placeholder="Search">
         </div>
         <div class="col col-lg-2">
             <select id="searchAttribute" class="form-select">
-                <option value="ID">ID</option>
-                <option value="Semeter">Semeter</option>
                 <option value="Title">Title</option>
                 <option value="Faculty">Faculty</option>
             </select>
@@ -59,19 +52,15 @@
             </button>
         </div>
     </div>
-
-
     <div class="d-flex justify-content-end mb-3">
         <a class="btn btn-primary" asp-controller="MarketingManager" asp-action="CreateMagazine"><i class="bi bi-plus-circle me-2"></i>Add new magazine</a>
     </div>
-
     @if (TempData["AlertMessage"] != null)
     {
         <div class="alert alert-success" role="alert">
             @TempData["AlertMessage"]
         </div>
     }
-
     <div class="table-responsive">
         <div class="scrollable-table">
             <table class="table table-3d table-striped">
@@ -92,7 +81,7 @@
                             <td>@magazine.Faculty</td>
                             <td>@magazine.AcademicYear</td>
                             <td class="d-flex justify-content-center">
-                                <a class="btn btn-primary me-3" asp-controller="MarketingManager" asp-action="DetailsMagazine" asp-route-id=@magazine.Id ><i class="bi bi-info-circle me-2"></i>Details</a>
+                                <a class="btn btn-primary me-3" asp-controller="MarketingManager" asp-action="DetailsMagazine" asp-route-id=@magazine.Id><i class="bi bi-info-circle me-2"></i>Details</a>
                                 <a class="btn btn-primary me-3" asp-controller="MarketingManager" asp-action="EditMagazine" asp-route-id=@magazine.Id><i class="bi bi-pencil-square me-2"></i>Edit</a>
                                 <button class="btn btn-danger delete-magazine" data-magazine-id="@magazine.Id" data-bs-toggle="modal" data-bs-target="#actionModal"><i class="bi bi-trash me-2"></i>Delete</button>
                             </td>
@@ -102,8 +91,6 @@
             </table>
         </div>
     </div>
-
-
     <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -122,8 +109,6 @@
         </div>
     </div>
 </div>
-
-
 @section Scripts {
     <script>
         document.querySelectorAll('.delete-magazine').forEach(item => {
@@ -134,12 +119,10 @@
             });
         });
     </script>
-
     <script>
         function updateSearchInput() {
             var selectedAttribute = document.getElementById("searchAttribute").value;
             var searchInput = document.getElementById("searchInput");
-
             switch (selectedAttribute) {
                 case "Title":
                     searchInput.placeholder = "Search by Title";
@@ -152,16 +135,12 @@
                     break;
             }
         }
-
         document.getElementById("searchAttribute").addEventListener("change", updateSearchInput);
-
         document.getElementById("searchButton").addEventListener("click", function () {
             var attribute = document.getElementById("searchAttribute").value;
             var value = document.getElementById("searchInput").value;
-
             window.location.href = "/MarketingManager/MagazinesManagement?attribute=" + attribute + "&value=" + value;
         });
-
         updateSearchInput();
     </script>
 
@@ -172,10 +151,8 @@
             var formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
             return formattedDate;
         }
-
         document.querySelectorAll('td:nth-child(4)').forEach(function (td) {
             td.textContent = formatDate(td.textContent);
         });
-
     </script>
 }
