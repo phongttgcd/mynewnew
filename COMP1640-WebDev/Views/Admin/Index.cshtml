@@ -14,24 +14,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-4 mb-4">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total Faculties</h5>
-                    <canvas id="facultiesChart" style="height: 200px;"></canvas>
-    </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4 mb-4">
-            <div class="card bg-warning text-dark">
-                <div class="card-body">
-                    <h5 class="card-title">Total Semesters</h5>
-                    <canvas id="semestersChart" style="height: 200px;"></canvas>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="row my-3">
@@ -52,30 +34,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Sample data for charts (replace with actual data)
-        var facultiesData = @Html.Raw(Json.Serialize(ViewBag.FacultiesData));
         var usersData = @Html.Raw(Json.Serialize(ViewBag.UsersData));
-        var semestersData = @Html.Raw(Json.Serialize(ViewBag.SemestersData));
-
-        // Create faculty chart
-        var facultiesChart = new Chart(document.getElementById('facultiesChart'), {
-            type: 'pie',
-            data: {
-                labels: [],
-                datasets: [{
-                    data: facultiesData,
-                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
-                        }
-                    }
-                }
-            }
-        });
 
         // Create users chart
         var usersChart = new Chart(document.getElementById('usersChart'), {
